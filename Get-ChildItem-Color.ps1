@@ -6,12 +6,12 @@ function Get-ChildItem-Color {
         $ifwide = $false
     }
 
-    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all"))  { 
+    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all"))  {
         $Args[0] = "-Force"
     }
 
     $width =  $host.UI.RawUI.WindowSize.Width
-    $cols = 3   
+    $cols = 3
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
     $compressed_list = @(".zip", ".tar", ".gz", ".rar")
@@ -83,7 +83,7 @@ function Get-ChildItem-Color {
             echo $_
             $Host.UI.RawUI.ForegroundColor = $color_fore
         }
-    } 
+    }
     if ($nnl) {
         Write-Host ""
     }
