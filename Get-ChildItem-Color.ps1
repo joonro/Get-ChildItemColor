@@ -17,29 +17,29 @@ function Get-ChildItem-Color {
     $compressed_list = @(".zip", ".tar", ".gz", ".rar")
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
                          ".psm1", ".vbs", ".rb", ".reg", ".fsx")
-    $text_files_list = @(".txt", ".cfg", ".conf", ".ini", ".csv", ".lg")
     $dll_pdb_list = @(".dll", ".pdb")
-    $configs_list = @(".config", ".conf", ".ini")
+    $text_files_list = @(".txt", ".csv", ".lg")
+    $configs_list = @(".cfg", ".config", ".conf", ".ini")
 
     $color_table = @{}
     foreach ($Extension in $compressed_list) {
-        $color_table[$Extension] = "yellow"
+        $color_table[$Extension] = "Yellow"
     }
 
     foreach ($Extension in $executable_list) {
-        $color_table[$Extension] = "blue"
+        $color_table[$Extension] = "Blue"
     }
 
     foreach ($Extension in $text_files_list) {
-        $color_table[$Extension] = "cyan"
+        $color_table[$Extension] = "Cyan"
     }
 
     foreach ($Extension in $dll_pdb_list) {
-        $color_table[$Extension] = "darkgreen"
+        $color_table[$Extension] = "Darkgreen"
     }
 
     foreach ($Extension in $configs_list) {
-        $color_table[$Extension] = "cyan"
+        $color_table[$Extension] = "Yellow"
     }
 
     $i = 0
