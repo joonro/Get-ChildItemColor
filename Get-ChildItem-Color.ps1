@@ -14,39 +14,48 @@ function Get-ChildItem-Color {
     $cols = 3   
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
-    $regex_opts = ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase `
-    -bor [System.Text.RegularExpressions.RegexOptions]::Compiled)
-     
-    $re_compressed = New-Object System.Text.RegularExpressions.Regex(
-    '\.(zip|tar|gz|rar)$', $regex_opts)
-    $re_executable = New-Object System.Text.RegularExpressions.Regex(
-    '\.(exe|bat|cmd|py|pl|ps1|psm1|vbs|rb|reg|fsx)$', $regex_opts)
-    $re_dll_pdb = New-Object System.Text.RegularExpressions.Regex(
-    '\.(dll|pdb)$', $regex_opts)
-    $re_configs = New-Object System.Text.RegularExpressions.Regex(
-    '\.(config|conf|ini)$', $regex_opts)
-    $re_text_files = New-Object System.Text.RegularExpressions.Regex(
-    '\.(txt|cfg|conf|ini|csv|log)$', $regex_opts)
+    $compressed_list = @(".zip", ".tar", ".gz", ".rar")
+    $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
+                         ".psm1", ".vbs", ".rb", ".reg", ".fsx")
+    $text_files_list = @(".txt", ".cfg", ".conf", ".ini", ".csv", ".lg")
+    $dll_pdb_list = @(".dll", ".pdb")
+    $configs_list = @(".config", ".conf", ".ini")
+
+    $color_table = @{}
+    foreach ($Extension in $compressed_list) {
+        $color_table[$Extension] = "yellow"
+    }
+
+    foreach ($Extension in $executable_list) {
+        $color_table[$Extension] = "blue"
+    }
+
+    foreach ($Extension in $text_files_list) {
+        $color_table[$Extension] = "cyan"
+    }
+
+    foreach ($Extension in $dll_pdb_list) {
+        $color_table[$Extension] = "darkgreen"
+    }
+
+    foreach ($Extension in $configs_list) {
+        $color_table[$Extension] = "cyan"
+    }
 
     $i = 0
     $pad = [int]($width/$cols) - 1
     $nll = $false
- 
-    Invoke-Expression ("Get-ChildItem $Args") | 
-    %{ 
-        $c = $color_fore
-        if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
-        } elseif ($re_compressed.IsMatch($_.Extension)) {
-            $c = 'Yellow'
-        } elseif ($re_executable.IsMatch($_.Extension)) {
-            $c = 'Blue'
-        } elseif ($re_text_files.IsMatch($_.Extension)) {
-            $c = 'Cyan'
-        } elseif ($re_dll_pdb.IsMatch($_.Extension)) {
-            $c = 'DarkGreen'
-        } elseif ($re_configs.IsMatch($_.Extension)) {
-            $c = 'Yellow'
+
+    Invoke-Expression ("Get-ChildItem $Args") |
+    %{
+        if ($_.gettype().name -eq 'directoryinfo') {
+            $c = 'green'
+        } else {
+            $c = $color_table[$_.Extension]
+
+            if ($c -eq $none) {
+                $c = $color_fore
+            }
         }
 
         if ($ifwide) {
