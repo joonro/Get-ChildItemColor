@@ -93,3 +93,10 @@ function Get-ChildItem-Color {
         Write-Host ""
     }
 }
+
+function Get-ChildItem-Format-Wide {
+    $New_Args = @($true)
+    $New_Args += $Args
+    Invoke-Expression ("Get-ChildItem-Color $New_Args")
+}
+
