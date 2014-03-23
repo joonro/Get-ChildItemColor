@@ -64,7 +64,7 @@ function Get-ChildItem-Color {
         }
 
         if ($ifwide) {
-            if ($i -eq -1) {  # change this to `$i -eq 0` to show DirectoryName
+            if ($i -eq -1) {  # change this to `-eq 0` to show DirectoryName
                 if ($_.GetType().Name -eq "FileInfo") {
                     $DirectoryName = $_.DirectoryName
                 } elseif ($_.GetType().Name -eq "DirectoryInfo") {
