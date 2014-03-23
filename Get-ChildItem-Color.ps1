@@ -1,56 +1,70 @@
 function Get-ChildItem-Color {
     if ($Args[0] -eq $true) {
         $ifwide = $true
-        $Args = $Args[1..($Args.length-1)]
+
+        if ($Args.Length -gt 1) {
+            $Args = $Args[1..($Args.length - 1)]
+        } else {
+            $Args = @()
+        }
     } else {
         $ifwide = $false
     }
 
-    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all"))  { 
+    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all")) {
         $Args[0] = "-Force"
     }
 
     $width =  $host.UI.RawUI.WindowSize.Width
-    $cols = 3   
+    $cols = 3
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
-    $regex_opts = ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase `
-    -bor [System.Text.RegularExpressions.RegexOptions]::Compiled)
-     
-    $re_compressed = New-Object System.Text.RegularExpressions.Regex(
-    '\.(zip|tar|gz|rar)$', $regex_opts)
-    $re_executable = New-Object System.Text.RegularExpressions.Regex(
-    '\.(exe|bat|cmd|py|pl|ps1|psm1|vbs|rb|reg|fsx)$', $regex_opts)
-    $re_dll_pdb = New-Object System.Text.RegularExpressions.Regex(
-    '\.(dll|pdb)$', $regex_opts)
-    $re_configs = New-Object System.Text.RegularExpressions.Regex(
-    '\.(config|conf|ini)$', $regex_opts)
-    $re_text_files = New-Object System.Text.RegularExpressions.Regex(
-    '\.(txt|cfg|conf|ini|csv|log)$', $regex_opts)
+    $compressed_list = @(".zip", ".tar", ".gz", ".rar")
+    $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
+                         ".psm1", ".vbs", ".rb", ".reg", ".fsx")
+    $dll_pdb_list = @(".dll", ".pdb")
+    $text_files_list = @(".txt", ".csv", ".lg")
+    $configs_list = @(".cfg", ".config", ".conf", ".ini")
+
+    $color_table = @{}
+    foreach ($Extension in $compressed_list) {
+        $color_table[$Extension] = "Yellow"
+    }
+
+    foreach ($Extension in $executable_list) {
+        $color_table[$Extension] = "Blue"
+    }
+
+    foreach ($Extension in $text_files_list) {
+        $color_table[$Extension] = "Cyan"
+    }
+
+    foreach ($Extension in $dll_pdb_list) {
+        $color_table[$Extension] = "Darkgreen"
+    }
+
+    foreach ($Extension in $configs_list) {
+        $color_table[$Extension] = "Yellow"
+    }
 
     $i = 0
-    $pad = [int]($width/$cols) - 1
+    $pad = [int]($width / $cols) - 1
     $nll = $false
- 
-    Invoke-Expression ("Get-ChildItem $Args") | 
-    %{ 
-        $c = $color_fore
+
+    Invoke-Expression ("Get-ChildItem $Args") |
+    %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
             $c = 'Green'
-        } elseif ($re_compressed.IsMatch($_.Extension)) {
-            $c = 'Yellow'
-        } elseif ($re_executable.IsMatch($_.Extension)) {
-            $c = 'Blue'
-        } elseif ($re_text_files.IsMatch($_.Extension)) {
-            $c = 'Cyan'
-        } elseif ($re_dll_pdb.IsMatch($_.Extension)) {
-            $c = 'DarkGreen'
-        } elseif ($re_configs.IsMatch($_.Extension)) {
-            $c = 'Yellow'
+        } else {
+            $c = $color_table[$_.Extension]
+
+            if ($c -eq $none) {
+                $c = $color_fore
+            }
         }
 
         if ($ifwide) {
-            if ($i -eq -1) {  # change this to `$i -eq 0` to show DirectoryName
+            if ($i -eq -1) {  # change this to `-eq 0` to show DirectoryName
                 if ($_.GetType().Name -eq "FileInfo") {
                     $DirectoryName = $_.DirectoryName
                 } elseif ($_.GetType().Name -eq "DirectoryInfo") {
@@ -74,8 +88,15 @@ function Get-ChildItem-Color {
             echo $_
             $Host.UI.RawUI.ForegroundColor = $color_fore
         }
-    } 
+    }
     if ($nnl) {
         Write-Host ""
     }
 }
+
+function Get-ChildItem-Format-Wide {
+    $New_Args = @($true)
+    $New_Args += $Args
+    Invoke-Expression ("Get-ChildItem-Color $New_Args")
+}
+
