@@ -11,7 +11,7 @@ function Get-ChildItem-Color {
         $ifwide = $false
     }
 
-    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all"))  {
+    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all")) {
         $Args[0] = "-Force"
     }
 
@@ -48,13 +48,13 @@ function Get-ChildItem-Color {
     }
 
     $i = 0
-    $pad = [int]($width/$cols) - 1
+    $pad = [int]($width / $cols) - 1
     $nll = $false
 
     Invoke-Expression ("Get-ChildItem $Args") |
     %{
-        if ($_.gettype().name -eq 'directoryinfo') {
-            $c = 'green'
+        if ($_.GetType().Name -eq 'DirectoryInfo') {
+            $c = 'Green'
         } else {
             $c = $color_table[$_.Extension]
 
