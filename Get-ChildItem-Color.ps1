@@ -1,7 +1,12 @@
 function Get-ChildItem-Color {
     if ($Args[0] -eq $true) {
         $ifwide = $true
-        $Args = $Args[1..($Args.length-1)]
+
+        if ($Args.Length -gt 1) {
+            $Args = $Args[1..($Args.length - 1)]
+        } else {
+            $Args = @()
+        }
     } else {
         $ifwide = $false
     }
