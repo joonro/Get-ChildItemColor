@@ -18,19 +18,19 @@ Install
 
    git clone https://github.com/joonro/Get-ChildItem-Color.git
 
-It is convenient to do this in your `$PROFILE` [#]_ folder.
+It is convenient to do this in your ``$PROFILE`` [1]_ folder.
 
 Usage
 =====
 
-In your `$PROFILE` [#]_, add the following::
+In your ``$PROFILE``, add the following::
 
    . "Path\To\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
 
    Set-Alias l Get-ChildItem-Color -option AllScope
    Set-Alias ls Get-ChildItem-Format-Wide -option AllScope
 
-If you install it under the `$PROFILE` folder, you can also do the following::
+If you install it under the ``$PROFILE`` folder, you can also do the following::
 
    $ScriptPath = Split-Path -parent $PSCommandPath
    . "$ScriptPath\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
@@ -52,5 +52,5 @@ and also `Keith Hill
 Footnotes
 =========
 
-.. [#] ``C:\Users\username\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1``
+.. [1] ``C:\Users\username\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1``
 
