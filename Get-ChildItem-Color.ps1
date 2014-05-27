@@ -19,11 +19,11 @@ function Get-ChildItem-Color {
     $cols = 3
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
-    $compressed_list = @(".zip", ".tar", ".gz", ".rar")
+    $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
                          ".psm1", ".vbs", ".rb", ".reg", ".fsx")
     $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".txt", ".csv", ".lg")
+    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt")
     $configs_list = @(".cfg", ".config", ".conf", ".ini")
 
     $color_table = @{}
