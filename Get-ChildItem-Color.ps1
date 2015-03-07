@@ -44,12 +44,12 @@ function Get-ChildItem-Color {
     }
 
     foreach ($Extension in $configs_list) {
-        $color_table[$Extension] = "Yellow"
+        $color_table[$Extension] = "DarkYellow"
     }
 
     $i = 0
     $pad = [int]($width / $cols) - 1
-    $nll = $false
+    $nnl = $false
 
     Invoke-Expression ("Get-ChildItem $Args") |
     %{
@@ -108,7 +108,8 @@ function Get-ChildItem-Color {
             ++$i  # increase the counter
         }
     }
-    if ($nnl) {
+
+    if ($nnl) {  # conditionally add an empty line
         Write-Host ""
     }
 }
@@ -118,4 +119,3 @@ function Get-ChildItem-Format-Wide {
     $New_Args += $Args
     Invoke-Expression ("Get-ChildItem-Color $New_Args")
 }
-
