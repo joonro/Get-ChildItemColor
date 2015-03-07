@@ -19,11 +19,11 @@ function Get-ChildItem-Color {
     $cols = 3
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
-    $compressed_list = @(".zip", ".tar", ".gz", ".rar")
+    $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
                          ".psm1", ".vbs", ".rb", ".reg", ".fsx")
     $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".txt", ".csv", ".lg")
+    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt")
     $configs_list = @(".cfg", ".config", ".conf", ".ini")
 
     $color_table = @{}
@@ -44,39 +44,45 @@ function Get-ChildItem-Color {
     }
 
     foreach ($Extension in $configs_list) {
-        $color_table[$Extension] = "Yellow"
+        $color_table[$Extension] = "DarkYellow"
     }
 
     $i = 0
     $pad = [int]($width / $cols) - 1
-    $nll = $false
+    $nnl = $false
 
     Invoke-Expression ("Get-ChildItem $Args") |
     %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
             $c = 'Green'
+            $length = ""
         } else {
             $c = $color_table[$_.Extension]
 
             if ($c -eq $none) {
                 $c = $color_fore
             }
+
+            $length = $_.length
         }
 
-        if ($ifwide) {
-            if ($i -eq -1) {  # change this to `-eq 0` to show DirectoryName
-                if ($_.GetType().Name -eq "FileInfo") {
-                    $DirectoryName = $_.DirectoryName
-                } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-                    $DirectoryName = $_.Parent.FullName
-                }
-                Write-Host ""
-                Write-Host -Fore 'Green' ("   Directory: " + $DirectoryName)
-                Write-Host ""
+        # get the directory name
+        if ($i -eq 0) {
+            if ($_.GetType().Name -eq "FileInfo") {
+                $DirectoryName = $_.DirectoryName
+            } elseif ($_.GetType().Name -eq "DirectoryInfo") {
+                $DirectoryName = $_.Parent.FullName
+            }
+        }
+        
+        if ($ifwide) {  # Wide (ls)
+            if ($i -eq 0) {  # change this to `-eq 0` to show DirectoryName
+                Write-Host -Fore $color_fore ("`n   Directory: $DirectoryName`n")
             }
 
             $nnl = ++$i % $cols -ne 0
 
+            # truncate the item name
             $towrite = $_.Name
             if ($towrite.length -gt $pad - 2) {
                 $towrite = $towrite.Substring(0, $pad - 5) + "..."
@@ -84,12 +90,26 @@ function Get-ChildItem-Color {
 
             Write-Host ("{0,-$pad}" -f $towrite) -Fore $c -NoNewLine:$nnl
         } else {
+            If ($i -eq 0) {  # first item - print out the header
+                Write-Host "`n    Directory: $DirectoryName`n"
+                Write-Host "Mode                LastWriteTime     Length Name"
+                Write-Host "----                -------------     ------ ----"
+            }
             $Host.UI.RawUI.ForegroundColor = $c
-            echo $_
+
+            Write-Host ("{0,-7} {1,25} {2,10} {3}" -f $_.mode,
+                        ([String]::Format("{0,10}  {1,8}",
+                                          $_.LastWriteTime.ToString("d"),
+                                          $_.LastWriteTime.ToString("t"))),
+                        $length, $_.name)
+           
             $Host.UI.RawUI.ForegroundColor = $color_fore
+
+            ++$i  # increase the counter
         }
     }
-    if ($nnl) {
+
+    if ($nnl) {  # conditionally add an empty line
         Write-Host ""
     }
 }
@@ -99,4 +119,3 @@ function Get-ChildItem-Format-Wide {
     $New_Args += $Args
     Invoke-Expression ("Get-ChildItem-Color $New_Args")
 }
-

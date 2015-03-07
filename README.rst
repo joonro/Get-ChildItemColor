@@ -4,17 +4,17 @@
 Get-ChildItem-Color
 ===================
 
-Add coloring to the output of `Get-ChildItem` Cmdlet of PowerShell. In
+Add coloring to the output of ``Get-ChildItem`` Cmdlet of PowerShell. In
 addition to the original functionality, this provides:
 
-* Color support for `Format-Wide` case (`ls` equivalent) 
-* Better performance by using `Dictionary` objects instead of regular
+* Color support for ``Format-Wide`` case (``ls`` equivalent) 
+* Better performance by using ``Dictionary`` objects instead of regular
   expressions
 
 Install
 =======
 
-.. code-block::
+.. code-block:: console
 
    git clone https://github.com/joonro/Get-ChildItem-Color.git
 
@@ -23,14 +23,18 @@ It is convenient to do this in your ``$PROFILE`` [1]_ folder.
 Usage
 =====
 
-In your ``$PROFILE``, add the following::
+In your ``$PROFILE``, add the following:
+
+.. code-block:: posh
 
    . "Path\To\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
 
    Set-Alias l Get-ChildItem-Color -option AllScope
    Set-Alias ls Get-ChildItem-Format-Wide -option AllScope
 
-If you install it under the ``$PROFILE`` folder, you can also do the following::
+If you install it under the ``$PROFILE`` folder, you can also do the following:
+
+.. code-block:: posh
 
    $ScriptPath = Split-Path -parent $PSCommandPath
    . "$ScriptPath\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
@@ -53,4 +57,3 @@ Footnotes
 =========
 
 .. [1] ``C:\Users\username\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1``
-
