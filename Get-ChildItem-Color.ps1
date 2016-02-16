@@ -67,16 +67,17 @@ function Get-ChildItem-Color {
         }
 
         # get the directory name
-        if ($i -eq 0) {
-            if ($_.GetType().Name -eq "FileInfo") {
-                $DirectoryName = $_.DirectoryName
-            } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-                $DirectoryName = $_.Parent.FullName
-            }
+        if ($_.GetType().Name -eq "FileInfo") {
+            $DirectoryName = $_.DirectoryName
+        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
+            $DirectoryName = $_.Parent.FullName
         }
         
         if ($ifwide) {  # Wide (ls)
-            if ($i -eq 0) {  # change this to `-eq 0` to show DirectoryName
+            if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
+                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){ # conditionally add an empty line
+                    write-host ""
+                }
                 Write-Host -Fore $color_fore ("`n   Directory: $DirectoryName`n")
             }
 
@@ -90,7 +91,7 @@ function Get-ChildItem-Color {
 
             Write-Host ("{0,-$pad}" -f $towrite) -Fore $c -NoNewLine:$nnl
         } else {
-            If ($i -eq 0) {  # first item - print out the header
+            If ($LastDirectoryName -ne $DirectoryName) {  # first item - print out the header
                 Write-Host "`n    Directory: $DirectoryName`n"
                 Write-Host "Mode                LastWriteTime     Length Name"
                 Write-Host "----                -------------     ------ ----"
@@ -107,6 +108,7 @@ function Get-ChildItem-Color {
 
             ++$i  # increase the counter
         }
+        $LastDirectoryName = $DirectoryName
     }
 
     if ($nnl) {  # conditionally add an empty line
