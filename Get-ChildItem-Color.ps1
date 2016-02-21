@@ -16,7 +16,14 @@ function Get-ChildItem-Color {
     }
 
     $width =  $host.UI.RawUI.WindowSize.Width
-    $cols = 3
+    
+    $items = Invoke-Expression ("Get-ChildItem $Args");
+    $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
+    $len = $lnStr.name.length
+    $cols = If ($len) {($width+1)/($len+2)} Else {1};
+    $cols = [math]::floor($cols);
+    if(!$cols){ $cols=1;}
+
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
     $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
@@ -48,10 +55,10 @@ function Get-ChildItem-Color {
     }
 
     $i = 0
-    $pad = [int]($width / $cols) - 1
+    $pad = [math]::ceiling(($width+2) / $cols) - 3
     $nnl = $false
 
-    Invoke-Expression ("Get-ChildItem $Args") |
+    $items |
     %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
             $c = 'Green'
@@ -67,16 +74,17 @@ function Get-ChildItem-Color {
         }
 
         # get the directory name
-        if ($i -eq 0) {
-            if ($_.GetType().Name -eq "FileInfo") {
-                $DirectoryName = $_.DirectoryName
-            } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-                $DirectoryName = $_.Parent.FullName
-            }
+        if ($_.GetType().Name -eq "FileInfo") {
+            $DirectoryName = $_.DirectoryName
+        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
+            $DirectoryName = $_.Parent.FullName
         }
         
         if ($ifwide) {  # Wide (ls)
-            if ($i -eq 0) {  # change this to `-eq 0` to show DirectoryName
+            if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
+                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){ # conditionally add an empty line
+                    write-host ""
+                }
                 Write-Host -Fore $color_fore ("`n   Directory: $DirectoryName`n")
             }
 
@@ -84,13 +92,16 @@ function Get-ChildItem-Color {
 
             # truncate the item name
             $towrite = $_.Name
-            if ($towrite.length -gt $pad - 2) {
-                $towrite = $towrite.Substring(0, $pad - 5) + "..."
+            if ($towrite.length -gt $pad) {
+                $towrite = $towrite.Substring(0, $pad - 3) + "..."
             }
 
             Write-Host ("{0,-$pad}" -f $towrite) -Fore $c -NoNewLine:$nnl
+            if($nnl){
+                write-host "  " -NoNewLine
+            }
         } else {
-            If ($i -eq 0) {  # first item - print out the header
+            If ($LastDirectoryName -ne $DirectoryName) {  # first item - print out the header
                 Write-Host "`n    Directory: $DirectoryName`n"
                 Write-Host "Mode                LastWriteTime     Length Name"
                 Write-Host "----                -------------     ------ ----"
@@ -107,6 +118,7 @@ function Get-ChildItem-Color {
 
             ++$i  # increase the counter
         }
+        $LastDirectoryName = $DirectoryName
     }
 
     if ($nnl) {  # conditionally add an empty line
