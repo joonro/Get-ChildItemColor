@@ -7,9 +7,11 @@ Get-ChildItem-Color
 Add coloring to the output of ``Get-ChildItem`` Cmdlet of PowerShell. In
 addition to the original functionality, this provides:
 
-* Color support for ``Format-Wide`` case (``ls`` equivalent) 
-* Better performance by using ``Dictionary`` objects instead of regular
+- Better performance by using ``Dictionary`` objects instead of regular
   expressions
+- Color support for ``Format-Wide`` case (``ls`` equivalent)
+- Automatically compute number of columns for ``Format-Wide`` case (thanks to
+  `Guillaume Collic <https://github.com/gcollic>`_
 
 Install
 =======
