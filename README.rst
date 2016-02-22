@@ -11,7 +11,7 @@ addition to the original functionality, this provides:
   expressions
 - Color support for ``Format-Wide`` case (``ls`` equivalent)
 - Automatically compute number of columns for ``Format-Wide`` case (thanks to
-  `Guillaume Collic <https://github.com/gcollic>`_
+  `Guillaume Collic <https://github.com/gcollic>`_)
 
 Install
 =======
