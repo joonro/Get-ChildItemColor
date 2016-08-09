@@ -1,4 +1,5 @@
-function Get-ChildItem-Color {
+function Get-ChildItem-Color() {
+    $isForce = $false
     if ($Args[0] -eq $true) {
         $ifwide = $true
 
@@ -10,14 +11,19 @@ function Get-ChildItem-Color {
     } else {
         $ifwide = $false
     }
-
     if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all")) {
-        $Args[0] = "-Force"
+        $isForce = $true
     }
 
     $width =  $host.UI.RawUI.WindowSize.Width
-    
-    $items = Invoke-Expression ("Get-ChildItem $Args");
+    if ($isForce) {
+        $Args = $Args[1..($Args.length - 1)]
+        $items = Invoke-Expression ("Get-ChildItem '$Args' -Force");
+    }
+    else {
+        $items = Invoke-Expression ("Get-ChildItem '$Args'");
+    }
+
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
     $cols = If ($len) {($width+1)/($len+2)} Else {1};
@@ -28,10 +34,10 @@ function Get-ChildItem-Color {
 
     $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                         ".psm1", ".vbs", ".rb", ".reg", ".fsx")
+                         ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh", ".cmd")
     $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt")
-    $configs_list = @(".cfg", ".config", ".conf", ".ini")
+    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt", ".log")
+    $configs_list = @(".cfg", ".config", ".conf", ".ini", ".json")
 
     $color_table = @{}
     foreach ($Extension in $compressed_list) {
