@@ -1,29 +1,24 @@
-function Get-ChildItem-Color() {
-    $isForce = $false
+function Get-ChildItem-Color {
+
     if ($Args[0] -eq $true) {
         $ifwide = $true
-
-        if ($Args.Length -gt 1) {
-            $Args = $Args[1..($Args.length - 1)]
-        } else {
-            $Args = @()
-        }
     } else {
         $ifwide = $false
     }
-    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all")) {
-        $isForce = $true
-    }
 
-    $width =  $host.UI.RawUI.WindowSize.Width
-    if ($isForce) {
-        $Args = $Args[1..($Args.length - 1)]
-        $items = Invoke-Expression ("Get-ChildItem '$Args' -Force");
+    if ($ifwide) {
+        if($Args.Length -le 1) {
+            $Args = @()
+        }
+        else {
+            $Args = $Args[1..($Args.length - 1)]
+        }
     }
-    else {
-        $items = Invoke-Expression ("Get-ChildItem '$Args'");
-    }
-
+    
+    $width = $host.UI.RawUI.WindowSize.Width
+   
+    $items = Invoke-Expression "Get-ChildItem $Args"
+    
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
     $cols = If ($len) {($width+1)/($len+2)} Else {1};
@@ -135,5 +130,5 @@ function Get-ChildItem-Color() {
 function Get-ChildItem-Format-Wide {
     $New_Args = @($true)
     $New_Args += $Args
-    Invoke-Expression ("Get-ChildItem-Color $New_Args")
+    Invoke-Expression "Get-ChildItem-Color $New_Args"
 }
