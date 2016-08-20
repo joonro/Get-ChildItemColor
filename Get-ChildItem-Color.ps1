@@ -17,7 +17,7 @@ function Get-ChildItem-Color {
 
     $width =  $host.UI.RawUI.WindowSize.Width
     
-    $items = Invoke-Expression ("Get-ChildItem $Args");
+    $items = Invoke-Expression "Get-ChildItem `"$Args`"";
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
     $cols = If ($len) {($width+1)/($len+2)} Else {1};
@@ -128,6 +128,6 @@ function Get-ChildItem-Color {
 
 function Get-ChildItem-Format-Wide {
     $New_Args = @($true)
-    $New_Args += $Args
-    Invoke-Expression ("Get-ChildItem-Color $New_Args")
+    $New_Args += "$Args"
+    Invoke-Expression "Get-ChildItem-Color $New_Args"
 }
