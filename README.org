@@ -1,4 +1,4 @@
-# Created 2017-04-22 Sat 01:26
+# Created 2017-04-22 Sat 12:33
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 This provides a colored version of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -54,6 +54,9 @@ of =Get-ChildItem | Format-Wide=
 - This code is based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and also [[http://stackoverflow.com/users/153982/keith-hill][Keith Hill]]'s answer at
   [[http://stackoverflow.com/questions/3420731/][this]] Stack Overflow question.
 * Changelog
+** v0.5.3
+- Better performance by reducing if's
+- Proper printing of =DirectoryEntry= for =FormatWide= case
 ** v0.5.2
 - Published on PowerShellGallery
 - Refactoring; separate out two functions
