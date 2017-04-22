@@ -48,9 +48,11 @@ Function Get-ChildItemColor {
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
+            $DirectoryName = $_.Parent.FullName
             $Color = 'Green'
             $Length = ""
         } else {
+            $DirectoryName = $_.DirectoryName
             $Color = $ColorTable[$_.Extension]
 
             if ($Color -eq $None) {
@@ -60,13 +62,6 @@ Function Get-ChildItemColor {
             $Length = $_.Length
         }
 
-        # get the directory name
-        if ($_.GetType().Name -eq "FileInfo") {
-            $DirectoryName = $_.DirectoryName
-        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-            $DirectoryName = $_.Parent.FullName
-        }
-        
         If ($LastDirectoryName -ne $DirectoryName) {  # first item - print out the header
             Write-Host "`n    Directory: $DirectoryName`n"
             Write-Host "Mode                LastWriteTime     Length Name"
@@ -120,9 +115,12 @@ Function Get-ChildItemColorFormatWide {
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
+            $DirectoryName = $_.Parent.FullName
+
             $Color = 'Green'
             $Color = $ForegroundColor
         } else {
+            $DirectoryName = $_.DirectoryName
 
             $Color = $ColorTable[$_.Extension]
 
@@ -131,13 +129,6 @@ Function Get-ChildItemColorFormatWide {
             }
         }
 
-        # get the directory name
-        if ($_.GetType().Name -eq "FileInfo") {
-            $DirectoryName = $_.DirectoryName
-        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-            $DirectoryName = $_.Parent.FullName
-        }
-        
         if ($LastDirectoryName -ne $DirectoryName) {
             if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
