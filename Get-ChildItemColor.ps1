@@ -1,9 +1,14 @@
-    Param([switch]$FormatWide)
 Function Get-ChildItemColor {
+    Param(
+        [string]$Path = "",
+        [switch]$Force,
+        [switch]$FormatWide
+    )
+    $expression = "Get-ChildItem -Path `"$Path`" $Args"
 
+    if ($Force) {$expression += " -Force"}
 
-   
-    $items = Invoke-Expression "Get-ChildItem $Args"
+    $items = Invoke-Expression $expression
     
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
@@ -114,6 +119,15 @@ Function Get-ChildItemColor {
     }
 }
 
-    Invoke-Expression "Get-ChildItemColor $Args -FormatWide"
 Function Get-ChildItemFormatWide {
+    Param(
+        [string]$Path = "",
+        [switch]$Force
+    )
+
+    $expression = "Get-ChildItemColor -Path `"$Path`" $Args -FormatWide"
+
+    if ($Force) {$expression += " -Force"}
+
+    Invoke-Expression $expression 
 }
