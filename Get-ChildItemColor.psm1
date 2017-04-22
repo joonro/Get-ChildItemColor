@@ -98,10 +98,6 @@ Function Get-ChildItemColorFormatWide {
 
     $items = Invoke-Expression $expression
 
-    if ($items[0].GetType().Name -eq "DictionaryEntry") {
-        Return $items
-    }
-    
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
     $width = $host.UI.RawUI.WindowSize.Width
@@ -118,6 +114,8 @@ Function Get-ChildItemColorFormatWide {
             $DirectoryName = $_.Parent.FullName
 
             $Color = 'Green'
+        } elseif ($_.GetType().Name -eq "DictionaryEntry") {
+            $DirectoryName = $_.DirectoryName
             $Color = $ForegroundColor
         } else {
             $DirectoryName = $_.DirectoryName
