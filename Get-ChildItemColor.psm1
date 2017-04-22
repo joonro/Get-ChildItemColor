@@ -1,3 +1,5 @@
+$nnl = $True
+
 $ForegroundColor = $Host.UI.RawUI.ForegroundColor
 
 $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
@@ -44,7 +46,6 @@ Function Get-ChildItemColor {
     }
     
     $i = 0
-    $nnl = $false
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
@@ -107,7 +108,6 @@ Function Get-ChildItemColorFormatWide {
 
     $i = 0
     $pad = [math]::ceiling(($width + 2) / $cols) - 3
-    $nnl = $false
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
