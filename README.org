@@ -1,7 +1,7 @@
-# Created 2017-04-21 Fri 23:42
+# Created 2017-04-22 Sat 01:14
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
-This provides colored version of =Get-ChildItem= Cmdlet of PowerShell. It is
+This provides a colored version of =Get-ChildItem= Cmdlet of PowerShell. It is
 based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]]. In addition to the original functionality, it
 provides:
 
@@ -34,7 +34,7 @@ the following in my =$PROFILE$= [fn:PathProfile]:
 Import-Module Get-ChildItemColor
  
 Set-Alias l Get-ChildItemColor -option AllScope
-Set-Alias ls Get-ChildItemFormatWide -option AllScope
+Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 #+END_SRC
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output

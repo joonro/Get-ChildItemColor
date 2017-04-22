@@ -92,7 +92,7 @@ Function Get-ChildItemColor {
     }
 }
 
-Function Get-ChildItemFormatWide {
+Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
         [switch]$Force
