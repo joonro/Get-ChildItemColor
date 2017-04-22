@@ -1,4 +1,4 @@
-# Created 2017-04-21 Fri 21:53
+# Created 2017-04-21 Fri 22:16
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 Add coloring to the output of =Get-ChildItem= Cmdlet of PowerShell. In
@@ -46,6 +46,8 @@ Set-Alias ls Get-ChildItemFormatWide -option AllScope
   [[http://stackoverflow.com/questions/3420731/][this]] Stack Overflow question.
 
 * Changelog
+** v0.4.1
+- Returns vanila =Get-Childitem= results for =DictionaryEntry= cases.
 ** v0.4.0
 - Make function names consistent to the PowerShell naming convention (#8)
 - Use parameters more consistently, =-Path= works with paths with spaces (#3),
