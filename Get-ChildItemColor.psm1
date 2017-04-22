@@ -48,16 +48,16 @@ Function Get-ChildItemColor {
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
-            $length = ""
+            $Color = 'Green'
+            $Length = ""
         } else {
-            $c = $ColorTable[$_.Extension]
+            $Color = $ColorTable[$_.Extension]
 
-            if ($c -eq $none) {
-                $c = $ForegroundColor
+            if ($Color -eq $None) {
+                $Color = $ForegroundColor
             }
 
-            $length = $_.length
+            $Length = $_.Length
         }
 
         # get the directory name
@@ -72,13 +72,13 @@ Function Get-ChildItemColor {
             Write-Host "Mode                LastWriteTime     Length Name"
             Write-Host "----                -------------     ------ ----"
         }
-        $Host.UI.RawUI.ForegroundColor = $c
+        $Host.UI.RawUI.ForegroundColor = $Color
 
         Write-Host ("{0,-7} {1,25} {2,10} {3}" -f $_.mode,
                     ([String]::Format("{0,10}  {1,8}",
                                         $_.LastWriteTime.ToString("d"),
                                         $_.LastWriteTime.ToString("t"))),
-                    $length, $_.name)
+                    $Length, $_.Name)
 
         $Host.UI.RawUI.ForegroundColor = $ForegroundColor
 
@@ -120,16 +120,15 @@ Function Get-ChildItemColorFormatWide {
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
-            $length = ""
+            $Color = 'Green'
+            $Color = $ForegroundColor
         } else {
-            $c = $ColorTable[$_.Extension]
 
-            if ($c -eq $none) {
-                $c = $ForegroundColor
+            $Color = $ColorTable[$_.Extension]
+
+            if ($Color -eq $None) {
+                $Color = $ForegroundColor
             }
-
-            $length = $_.length
         }
 
         # get the directory name
@@ -154,9 +153,9 @@ Function Get-ChildItemColorFormatWide {
             $towrite = $towrite.Substring(0, $pad - 3) + "..."
         }
 
-        Write-Host ("{0,-$pad}" -f $towrite) -Fore $c -NoNewLine:$nnl
+        Write-Host ("{0,-$pad}" -f $towrite) -Fore $Color -NoNewLine:$nnl
         if ($nnl) {
-            write-host "  " -NoNewLine
+            Write-Host "  " -NoNewLine
         }
 
         $LastDirectoryName = $DirectoryName
