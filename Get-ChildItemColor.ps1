@@ -9,6 +9,10 @@ Function Get-ChildItemColor {
     if ($Force) {$expression += " -Force"}
 
     $items = Invoke-Expression $expression
+
+    if ($items[0].GetType().Name -eq "DictionaryEntry") {
+        Return $items
+    }
     
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
