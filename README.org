@@ -1,8 +1,9 @@
-# Created 2017-04-21 Fri 22:16
+# Created 2017-04-21 Fri 23:42
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
-Add coloring to the output of =Get-ChildItem= Cmdlet of PowerShell. In
-addition to the original functionality, this provides:
+This provides colored version of =Get-ChildItem= Cmdlet of PowerShell. It is
+based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]]. In addition to the original functionality, it
+provides:
 
 - Better performance by using =Dictionary= objects instead of regular
   expressions
@@ -11,41 +12,43 @@ addition to the original functionality, this provides:
   to [[https://github.com/gcollic][Guillaume Collic]])
 
 * Install
+Clone the repo in your PowerShell Module folder
+(=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=).
+
 #+BEGIN_SRC sh
 git clone https://github.com/joonro/Get-ChildItemColor.git
 #+END_SRC
-
-It is convenient to do this in your =$PROFILE= [fn:PathProfile] folder.
-
-In your =$PROFILE=, add the following:
+* Usage
+When you import the module:
 
 #+BEGIN_SRC powershell
-. "Path\To\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
+Import-Module Get-ChildItemColor
+#+END_SRC
 
+it will expose two functions, =Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
+
+You can add aliases to these functions for convenience. For example, I have
+the following in my =$PROFILE$= [fn:PathProfile]:
+
+#+BEGIN_SRC powershell
+Import-Module Get-ChildItemColor
+ 
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemFormatWide -option AllScope
 #+END_SRC
 
-If you install it under the =$PROFILE= folder, you can do the following instead:
-
-#+BEGIN_SRC powershell
-$ScriptPath = Split-Path -parent $PSCommandPath
-. "$ScriptPath\Get-ChildItemColor\Get-ChildItemColor.ps1"
-
-Set-Alias l Get-ChildItemColor -option AllScope
-Set-Alias ls Get-ChildItemFormatWide -option AllScope
-#+END_SRC
+So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
+of =Get-ChildItem | Format-Wide=
 
 [fn:PathProfile] =$ENV:UserProfile\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1=
-* Usage
-- =l= yields colored output of =Get-ChildItem=
-- =ls= yields colored output of =Get-ChildItem | Format-Wide=
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 - This code is based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and also [[http://stackoverflow.com/users/153982/keith-hill][Keith Hill]]'s answer at
   [[http://stackoverflow.com/questions/3420731/][this]] Stack Overflow question.
 
 * Changelog
+** v0.4.2
+- Make it a PowerShell module
 ** v0.4.1
 - Returns vanila =Get-Childitem= results for =DictionaryEntry= cases.
 ** v0.4.0
