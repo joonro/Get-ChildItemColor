@@ -1,4 +1,4 @@
-function Get-ChildItem-Color {
+function Get-ChildItemColor {
     Param([switch]$FormatWide)
 
 
@@ -114,6 +114,6 @@ function Get-ChildItem-Color {
     }
 }
 
-function Get-ChildItem-Format-Wide {
-    Invoke-Expression "Get-ChildItem-Color $Args -FormatWide"
+function Get-ChildItemFormatWide {
+    Invoke-Expression "Get-ChildItemColor $Args -FormatWide"
 }
