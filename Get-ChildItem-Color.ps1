@@ -1,20 +1,7 @@
 function Get-ChildItem-Color {
+    Param([switch]$FormatWide)
 
-    if ($Args[0] -eq $true) {
-        $ifwide = $true
-    } else {
-        $ifwide = $false
-    }
 
-    if ($ifwide) {
-        if($Args.Length -le 1) {
-            $Args = @()
-        }
-        else {
-            $Args = $Args[1..($Args.length - 1)]
-        }
-    }
-    
     $width = $host.UI.RawUI.WindowSize.Width
    
     $items = Invoke-Expression "Get-ChildItem $Args"
@@ -81,7 +68,7 @@ function Get-ChildItem-Color {
             $DirectoryName = $_.Parent.FullName
         }
         
-        if ($ifwide) {  # Wide (ls)
+        if ($FormatWide) {  # Wide (ls)
             if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
                 if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){ # conditionally add an empty line
                     write-host ""
@@ -128,6 +115,5 @@ function Get-ChildItem-Color {
 }
 
 function Get-ChildItem-Format-Wide {
-    $New_Args = @($true)
-    Invoke-Expression "Get-ChildItem-Color $New_Args"
+    Invoke-Expression "Get-ChildItem-Color $Args -FormatWide"
 }
