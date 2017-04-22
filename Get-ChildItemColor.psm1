@@ -134,3 +134,6 @@ Function Get-ChildItemFormatWide {
 
     Invoke-Expression $expression 
 }
+
+Export-ModuleMember -Function 'Get-*'
+
