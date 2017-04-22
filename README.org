@@ -1,4 +1,4 @@
-# Created 2017-04-22 Sat 01:14
+# Created 2017-04-22 Sat 01:26
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 This provides a colored version of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -12,6 +12,14 @@ provides:
   to [[https://github.com/gcollic][Guillaume Collic]])
 
 * Install
+** Install from PowerShellGallery
+PowerShellGet is required, which is included in Windows 10 and WMF5. If you
+are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.com/en-us/download/details.aspx?id=49186][PowerShellGet]].
+
+Then, you can simply run =Install-Module Get-ChildItemColor= (or
+=Install-Module Get-ChildItemColor -Scope CurrentUser=).
+
+** Install from GitHub
 Clone the repo in your PowerShell Module folder
 (=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=).
 
@@ -45,8 +53,10 @@ of =Get-ChildItem | Format-Wide=
 - [[http://github.com/joonro][Joon Ro]]
 - This code is based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and also [[http://stackoverflow.com/users/153982/keith-hill][Keith Hill]]'s answer at
   [[http://stackoverflow.com/questions/3420731/][this]] Stack Overflow question.
-
 * Changelog
+** v0.5.2
+- Published on PowerShellGallery
+- Refactoring; separate out two functions
 ** v0.4.2
 - Make it a PowerShell module
 ** v0.4.1
