@@ -1,3 +1,5 @@
+$nnl = $True
+
 $ForegroundColor = $Host.UI.RawUI.ForegroundColor
 
 $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
@@ -44,41 +46,35 @@ Function Get-ChildItemColor {
     }
     
     $i = 0
-    $nnl = $false
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
-            $length = ""
+            $DirectoryName = $_.Parent.FullName
+            $Color = 'Green'
+            $Length = ""
         } else {
-            $c = $ColorTable[$_.Extension]
+            $DirectoryName = $_.DirectoryName
+            $Color = $ColorTable[$_.Extension]
 
-            if ($c -eq $none) {
-                $c = $ForegroundColor
+            if ($Color -eq $None) {
+                $Color = $ForegroundColor
             }
 
-            $length = $_.length
+            $Length = $_.Length
         }
 
-        # get the directory name
-        if ($_.GetType().Name -eq "FileInfo") {
-            $DirectoryName = $_.DirectoryName
-        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
-            $DirectoryName = $_.Parent.FullName
-        }
-        
         If ($LastDirectoryName -ne $DirectoryName) {  # first item - print out the header
             Write-Host "`n    Directory: $DirectoryName`n"
             Write-Host "Mode                LastWriteTime     Length Name"
             Write-Host "----                -------------     ------ ----"
         }
-        $Host.UI.RawUI.ForegroundColor = $c
+        $Host.UI.RawUI.ForegroundColor = $Color
 
         Write-Host ("{0,-7} {1,25} {2,10} {3}" -f $_.mode,
                     ([String]::Format("{0,10}  {1,8}",
                                         $_.LastWriteTime.ToString("d"),
                                         $_.LastWriteTime.ToString("t"))),
-                    $length, $_.name)
+                    $Length, $_.Name)
 
         $Host.UI.RawUI.ForegroundColor = $ForegroundColor
 
@@ -103,10 +99,6 @@ Function Get-ChildItemColorFormatWide {
 
     $items = Invoke-Expression $expression
 
-    if ($items[0].GetType().Name -eq "DictionaryEntry") {
-        Return $items
-    }
-    
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
     $width = $host.UI.RawUI.WindowSize.Width
@@ -116,31 +108,27 @@ Function Get-ChildItemColorFormatWide {
 
     $i = 0
     $pad = [math]::ceiling(($width + 2) / $cols) - 3
-    $nnl = $false
 
     $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
-            $length = ""
-        } else {
-            $c = $ColorTable[$_.Extension]
-
-            if ($c -eq $none) {
-                $c = $ForegroundColor
-            }
-
-            $length = $_.length
-        }
-
-        # get the directory name
-        if ($_.GetType().Name -eq "FileInfo") {
-            $DirectoryName = $_.DirectoryName
-        } elseif ($_.GetType().Name -eq "DirectoryInfo") {
             $DirectoryName = $_.Parent.FullName
+
+            $Color = 'Green'
+        } elseif ($_.GetType().Name -eq "DictionaryEntry") {
+            $DirectoryName = $_.DirectoryName
+            $Color = $ForegroundColor
+        } else {
+            $DirectoryName = $_.DirectoryName
+
+            $Color = $ColorTable[$_.Extension]
+
+            if ($Color -eq $None) {
+                $Color = $ForegroundColor
+            }
         }
-        
+
         if ($LastDirectoryName -ne $DirectoryName) {
-            if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
+            if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
             Write-Host -Fore $ForegroundColor ("`n   Directory: $DirectoryName`n")
@@ -154,9 +142,9 @@ Function Get-ChildItemColorFormatWide {
             $towrite = $towrite.Substring(0, $pad - 3) + "..."
         }
 
-        Write-Host ("{0,-$pad}" -f $towrite) -Fore $c -NoNewLine:$nnl
+        Write-Host ("{0,-$pad}" -f $towrite) -Fore $Color -NoNewLine:$nnl
         if ($nnl) {
-            write-host "  " -NoNewLine
+            Write-Host "  " -NoNewLine
         }
 
         $LastDirectoryName = $DirectoryName
