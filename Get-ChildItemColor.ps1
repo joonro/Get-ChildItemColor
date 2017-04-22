@@ -1,16 +1,16 @@
-function Get-ChildItemColor {
     Param([switch]$FormatWide)
+Function Get-ChildItemColor {
 
 
-    $width = $host.UI.RawUI.WindowSize.Width
    
     $items = Invoke-Expression "Get-ChildItem $Args"
     
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
-    $cols = If ($len) {($width+1)/($len+2)} Else {1};
-    $cols = [math]::floor($cols);
-    if(!$cols){ $cols=1;}
+    $width = $host.UI.RawUI.WindowSize.Width
+    $cols = If ($len) {($width + 1) / ($len + 2)} Else {1}
+    $cols = [math]::floor($cols)
+    if (!$cols) {$cols=1}
 
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
@@ -18,8 +18,8 @@ function Get-ChildItemColor {
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
                          ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh", ".cmd")
     $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt", ".log")
-    $configs_list = @(".cfg", ".config", ".conf", ".ini", ".json")
+    $text_files_list = @(".csv", ".log", "markdown", ".rst", ".txt")
+    $configs_list = @(".cfg", ".conf", ".config", ".ini", ".json")
 
     $color_table = @{}
     foreach ($Extension in $compressed_list) {
@@ -70,7 +70,7 @@ function Get-ChildItemColor {
         
         if ($FormatWide) {  # Wide (ls)
             if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
-                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){ # conditionally add an empty line
+                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
                     write-host ""
                 }
                 Write-Host -Fore $color_fore ("`n   Directory: $DirectoryName`n")
@@ -114,6 +114,6 @@ function Get-ChildItemColor {
     }
 }
 
-function Get-ChildItemFormatWide {
     Invoke-Expression "Get-ChildItemColor $Args -FormatWide"
+Function Get-ChildItemFormatWide {
 }
