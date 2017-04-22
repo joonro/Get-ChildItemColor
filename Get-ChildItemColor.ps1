@@ -52,11 +52,10 @@ Function Get-ChildItemColor {
     }
 
     $i = 0
-    $pad = [math]::ceiling(($width+2) / $cols) - 3
+    $pad = [math]::ceiling(($width + 2) / $cols) - 3
     $nnl = $false
 
-    $items |
-    %{
+    $items | %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
             $c = 'Green'
             $length = ""
@@ -77,7 +76,7 @@ Function Get-ChildItemColor {
             $DirectoryName = $_.Parent.FullName
         }
         
-        if ($FormatWide) {  # Wide (ls)
+        if ($FormatWide) {
             if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
                 if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
                     write-host ""
