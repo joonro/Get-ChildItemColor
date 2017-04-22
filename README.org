@@ -1,0 +1,52 @@
+# Created 2017-04-21 Fri 21:53
+#+TITLE: Get-ChildItemColor
+#+AUTHOR: Joon Ro
+Add coloring to the output of =Get-ChildItem= Cmdlet of PowerShell. In
+addition to the original functionality, this provides:
+
+- Better performance by using =Dictionary= objects instead of regular
+  expressions
+- Color support for =| Format-Wide= format (=ls= equivalent)
+- Automatically compute number of columns for =| Format-Wide= format (thanks
+  to [[https://github.com/gcollic][Guillaume Collic]])
+
+* Install
+#+BEGIN_SRC sh
+git clone https://github.com/joonro/Get-ChildItemColor.git
+#+END_SRC
+
+It is convenient to do this in your =$PROFILE= [fn:PathProfile] folder.
+
+In your =$PROFILE=, add the following:
+
+#+BEGIN_SRC powershell
+. "Path\To\Get-ChildItem-Color\Get-ChildItem-Color.ps1"
+
+Set-Alias l Get-ChildItemColor -option AllScope
+Set-Alias ls Get-ChildItemFormatWide -option AllScope
+#+END_SRC
+
+If you install it under the =$PROFILE= folder, you can do the following instead:
+
+#+BEGIN_SRC powershell
+$ScriptPath = Split-Path -parent $PSCommandPath
+. "$ScriptPath\Get-ChildItemColor\Get-ChildItemColor.ps1"
+
+Set-Alias l Get-ChildItemColor -option AllScope
+Set-Alias ls Get-ChildItemFormatWide -option AllScope
+#+END_SRC
+
+[fn:PathProfile] =$ENV:UserProfile\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1=
+* Usage
+- =l= yields colored output of =Get-ChildItem=
+- =ls= yields colored output of =Get-ChildItem | Format-Wide=
+* Authors
+- [[http://github.com/joonro][Joon Ro]]
+- This code is based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and also [[http://stackoverflow.com/users/153982/keith-hill][Keith Hill]]'s answer at
+  [[http://stackoverflow.com/questions/3420731/][this]] Stack Overflow question.
+
+* Changelog
+** v0.4.0
+- Make function names consistent to the PowerShell naming convention (#8)
+- Use parameters more consistently, =-Path= works with paths with spaces (#3),
+  and =-Force= works (#9)
