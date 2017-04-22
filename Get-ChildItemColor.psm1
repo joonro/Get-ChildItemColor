@@ -61,4 +61,14 @@ Function Get-ChildItemColor {
     }
 }
 
+Function Get-ChildItemColorFormatWide {
+    Param(
+        [string]$Path = "",
+        [int]$Column = 3 
+    )
+
+    $Expression = "Get-ChildItemColor -Path `"$Path`" $Args | Format-Wide -Column $Column"
+    Invoke-Expression $Expression
+}
+
 Export-ModuleMember -Function 'Get-*'
