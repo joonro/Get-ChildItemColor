@@ -128,7 +128,7 @@ Function Get-ChildItemColorFormatWide {
         }
 
         if ($LastDirectoryName -ne $DirectoryName) {
-            if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
+            if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
             Write-Host -Fore $ForegroundColor ("`n   Directory: $DirectoryName`n")
