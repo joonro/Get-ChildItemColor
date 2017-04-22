@@ -1,37 +1,30 @@
-function Get-ChildItem-Color {
-    if ($Args[0] -eq $true) {
-        $ifwide = $true
+Function Get-ChildItemColor {
+    Param(
+        [string]$Path = "",
+        [switch]$Force,
+        [switch]$FormatWide
+    )
+    $expression = "Get-ChildItem -Path `"$Path`" $Args"
 
-        if ($Args.Length -gt 1) {
-            $Args = $Args[1..($Args.length - 1)]
-        } else {
-            $Args = @()
-        }
-    } else {
-        $ifwide = $false
-    }
+    if ($Force) {$expression += " -Force"}
 
-    if (($Args[0] -eq "-a") -or ($Args[0] -eq "--all")) {
-        $Args[0] = "-Force"
-    }
-
-    $width =  $host.UI.RawUI.WindowSize.Width
+    $items = Invoke-Expression $expression
     
-    $items = Invoke-Expression "Get-ChildItem `"$Args`"";
     $lnStr = $items | select-object Name | sort-object { "$_".length } -descending | select-object -first 1
     $len = $lnStr.name.length
-    $cols = If ($len) {($width+1)/($len+2)} Else {1};
-    $cols = [math]::floor($cols);
-    if(!$cols){ $cols=1;}
+    $width = $host.UI.RawUI.WindowSize.Width
+    $cols = If ($len) {($width + 1) / ($len + 2)} Else {1}
+    $cols = [math]::floor($cols)
+    if (!$cols) {$cols=1}
 
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
     $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
     $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                         ".psm1", ".vbs", ".rb", ".reg", ".fsx")
+                         ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh", ".cmd")
     $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt")
-    $configs_list = @(".cfg", ".config", ".conf", ".ini")
+    $text_files_list = @(".csv", ".log", "markdown", ".rst", ".txt")
+    $configs_list = @(".cfg", ".conf", ".config", ".ini", ".json")
 
     $color_table = @{}
     foreach ($Extension in $compressed_list) {
@@ -80,9 +73,9 @@ function Get-ChildItem-Color {
             $DirectoryName = $_.Parent.FullName
         }
         
-        if ($ifwide) {  # Wide (ls)
+        if ($FormatWide) {  # Wide (ls)
             if ($LastDirectoryName -ne $DirectoryName) {  # change this to `$LastDirectoryName -ne $DirectoryName` to show DirectoryName
-                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){ # conditionally add an empty line
+                if($i -ne 0 -AND $host.ui.rawui.CursorPosition.X -ne 0){  # conditionally add an empty line
                     write-host ""
                 }
                 Write-Host -Fore $color_fore ("`n   Directory: $DirectoryName`n")
@@ -126,8 +119,15 @@ function Get-ChildItem-Color {
     }
 }
 
-function Get-ChildItem-Format-Wide {
-    $New_Args = @($true)
-    $New_Args += "$Args"
-    Invoke-Expression "Get-ChildItem-Color $New_Args"
+Function Get-ChildItemFormatWide {
+    Param(
+        [string]$Path = "",
+        [switch]$Force
+    )
+
+    $expression = "Get-ChildItemColor -Path `"$Path`" $Args -FormatWide"
+
+    if ($Force) {$expression += " -Force"}
+
+    Invoke-Expression $expression 
 }
