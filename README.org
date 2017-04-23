@@ -1,4 +1,4 @@
-# Created 2017-04-22 Sat 17:39
+# Created 2017-04-22 Sat 18:47
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -6,14 +6,14 @@ based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-child
 Before version 1.0.0, the script actually had used =Write-Host= to write
 colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor=
 and keep the item object intact. Hence, now one can use pipeline. (e.g.,
-=Get-ChildItemColor | grep ".git"=), and =ls= equivalent is simply
+=Get-ChildItemColor | grep ".git"= ), and =ls= equivalent is simply
 =Get-ChildItemColor | Format-Wide=. 
 * Notes on the code
 - It uses a hash table instead of regular expressions to specify colors
 - Recognize the =DictionaryEntry= case (e.g., =Get-ChildItemColor env:=)
 - Color support for =| Format-Wide= format (=ls= equivalent) (with default =-Column 3=)
 * Install
-** Install from PowerShellGallery
+** Install from [[https://www.powershellgallery.com/packages/Get-ChildItemColor/][PowerShellGallery]]
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
 are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.com/en-us/download/details.aspx?id=49186][PowerShellGet]].
 
