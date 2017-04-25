@@ -79,11 +79,11 @@ Function Get-ChildItemColorFormatWide {
     $len = $lnStr.Name.Length
     $width = $Host.UI.RawUI.WindowSize.Width
     $cols = If ($len) {($width + 1) / ($len + 2)} Else {1}
-    $cols = [math]::floor($cols)
+    $cols = [math]::Floor($cols)
     if (!$cols) {$cols=1}
 
     $i = 0
-    $pad = [math]::ceiling(($width + 2) / $cols) - 3
+    $pad = [math]::Ceiling(($width + 2) / $cols) - 3
 
     ForEach ($Item in $Items) {
         if ($Item.GetType().Name -eq 'DirectoryInfo') {
@@ -116,12 +116,13 @@ Function Get-ChildItemColorFormatWide {
         $nnl = ++$i % $cols -ne 0
 
         # truncate the item name
-        $towrite = $Item.Name
-        if ($towrite.length -gt $pad) {
-            $towrite = $towrite.Substring(0, $pad - 3) + "..."
+        $toWrite = $Item.Name
+        if ($toWrite.length -gt $pad) {
+            $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
         }
 
-        Write-Host ("{0,-$pad}" -f $towrite) -Fore $Color -NoNewLine:$nnl
+        Write-Host ("{0,-$pad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
+
         if ($nnl) {
             Write-Host "  " -NoNewLine
         }
