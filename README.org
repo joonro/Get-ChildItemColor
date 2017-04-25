@@ -1,4 +1,4 @@
-# Created 2017-04-24 Mon 21:47
+# Created 2017-04-24 Mon 22:14
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -6,16 +6,15 @@ based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-child
 Before version 1.0.0, the script actually had used =Write-Host= to write
 colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor=
 and keep the item object intact. Hence, now one can use pipeline. (e.g.,
-=Get-ChildItemColor | grep ".git"= ), and =ls= equivalent is simply
-=Get-ChildItemColor | Format-Wide=. 
-
+=Get-ChildItemColor | grep ".git"= ). =Get-ChildItemColorFormatWide= still
+uses =Write-Host= for output however. This is because =Get-ChildItemColor |
+Format-Wide= does not allow multiple colors in one line. Hence, pipeline does
+not work with =Get-ChildItemColorFormatWide=.
 * Screenshot:
 ** Get-ChildItemColor
 [[file:./screenshots/Get-ChildItemColor.png]] 
-** =ls= equivalent
-- Current =Get-ChildItemColor | Format-Wide= is limited in that it can only
-  show the same color for a whole row. I'm planning to revert back to the
-  previous code for =ls= case only.
+** Get-ChildItemColorFormatWide (=ls= equivalent)
+[[file:./screenshots/Get-ChildItemColorFormatWide.png]] 
 * Notes on the code
 - It uses a hash table instead of regular expressions to specify colors
 - Recognize the =DictionaryEntry= case (e.g., =Get-ChildItemColor env:=)
@@ -60,6 +59,8 @@ of =Get-ChildItem | Format-Wide -Column 3=
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.1.0
+- Revert back to previous implementation of =Get-ChildItemColorFormatWide=
 ** v1.0.0
 - The script changes =$Host.UI.RawUI.ForegroundColor= only and keep the item object intact
 - =Get-ChildItemColorFormatWide= is basically =Get-ChildItemColor | Format-Wide=
