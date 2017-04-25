@@ -1,15 +1,15 @@
-# Created 2017-04-24 Mon 22:14
+# Created 2017-04-25 Tue 12:57
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
-This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
-based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]] by [[http://thepowershellguy.com/][the PowerShell Guy]].
-Before version 1.0.0, the script actually had used =Write-Host= to write
-colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor=
-and keep the item object intact. Hence, now one can use pipeline. (e.g.,
-=Get-ChildItemColor | grep ".git"= ). =Get-ChildItemColorFormatWide= still
-uses =Write-Host= for output however. This is because =Get-ChildItemColor |
-Format-Wide= does not allow multiple colors in one line. Hence, pipeline does
-not work with =Get-ChildItemColorFormatWide=.
+- This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
+  based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]] by [[http://thepowershellguy.com/][the PowerShell Guy]].
+- Before version 1.0.0, the script actually had used =Write-Host= to write
+  colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor= and keep the item object intact. Hence, now one can use pipeline.
+  (e.g., =Get-ChildItemColor | grep ".git"= ).
+- =Get-ChildItemColorFormatWide= still uses =Write-Host= for output
+  however. This is because =Get-ChildItemColor | Format-Wide= does not allow
+  multiple colors in one line. Hence, pipeline does not work with
+  =Get-ChildItemColorFormatWide=.
 * Screenshot:
 ** Get-ChildItemColor
 [[file:./screenshots/Get-ChildItemColor.png]] 
@@ -18,7 +18,7 @@ not work with =Get-ChildItemColorFormatWide=.
 * Notes on the code
 - It uses a hash table instead of regular expressions to specify colors
 - Recognize the =DictionaryEntry= case (e.g., =Get-ChildItemColor env:=)
-- Color support for =| Format-Wide= format (=ls= equivalent) (with default =-Column 3=)
+- Color support for =| Format-Wide= format (=ls= equivalent) with custom script
 * Install
 ** Install from [[https://www.powershellgallery.com/packages/Get-ChildItemColor/][PowerShellGallery]]
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
@@ -53,7 +53,7 @@ Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 #+END_SRC
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
-of =Get-ChildItem | Format-Wide -Column 3=
+of =Get-ChildItem | Format-Wide= equivalent.
 
 [fn:PathProfile] =$ENV:UserProfile\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1=
 * Authors
