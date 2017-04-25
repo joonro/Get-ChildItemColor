@@ -1,4 +1,4 @@
-# Created 2017-04-22 Sat 18:47
+# Created 2017-04-24 Mon 21:47
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -8,6 +8,14 @@ colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor=
 and keep the item object intact. Hence, now one can use pipeline. (e.g.,
 =Get-ChildItemColor | grep ".git"= ), and =ls= equivalent is simply
 =Get-ChildItemColor | Format-Wide=. 
+
+* Screenshot:
+** Get-ChildItemColor
+[[file:./screenshots/Get-ChildItemColor.png]] 
+** =ls= equivalent
+- Current =Get-ChildItemColor | Format-Wide= is limited in that it can only
+  show the same color for a whole row. I'm planning to revert back to the
+  previous code for =ls= case only.
 * Notes on the code
 - It uses a hash table instead of regular expressions to specify colors
 - Recognize the =DictionaryEntry= case (e.g., =Get-ChildItemColor env:=)
