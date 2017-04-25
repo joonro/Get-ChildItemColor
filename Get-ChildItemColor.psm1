@@ -64,11 +64,75 @@ Function Get-ChildItemColor {
 Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
-        [int]$Column = 3 
+        [switch]$Force
     )
 
-    $Expression = "Get-ChildItemColor -Path `"$Path`" $Args | Format-Wide -Column $Column"
-    Invoke-Expression $Expression
+    $nnl = $True
+
+    $Expression = "Get-ChildItem -Path `"$Path`" $Args"
+
+    if ($Force) {$Expression += " -Force"}
+
+    $Items = Invoke-Expression $Expression
+
+    $lnStr = $Items | Select-Object Name | Sort-Object { "$_".Length } -Descending | Select-Object -First 1
+    $len = $lnStr.Name.Length
+    $width = $Host.UI.RawUI.WindowSize.Width
+    $cols = If ($len) {($width + 1) / ($len + 2)} Else {1}
+    $cols = [math]::floor($cols)
+    if (!$cols) {$cols=1}
+
+    $i = 0
+    $pad = [math]::ceiling(($width + 2) / $cols) - 3
+
+    ForEach ($Item in $Items) {
+        if ($Item.GetType().Name -eq 'DirectoryInfo') {
+            $DirectoryName = $Item.Parent.FullName
+            $Key = 'Directory'
+
+        } elseif ($Item.GetType().Name -eq "DictionaryEntry") {
+            $DirectoryName = $Item.DirectoryName
+            $Key = 'Default'
+
+        } else {
+            $DirectoryName = $Item.DirectoryName
+
+            If ($ColorTable.ContainsKey($Item.Extension)) {
+                $Key = $Item.Extension
+            } else {
+                $Key = 'Default'
+            }
+        }
+
+        $Color = $ColorTable[$Key]
+
+        if ($LastDirectoryName -ne $DirectoryName) {
+            if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+                Write-Host ""
+            }
+            Write-Host -Fore $OriginalForegroundColor ("`n   Directory: $DirectoryName`n")
+        }
+
+        $nnl = ++$i % $cols -ne 0
+
+        # truncate the item name
+        $towrite = $Item.Name
+        if ($towrite.length -gt $pad) {
+            $towrite = $towrite.Substring(0, $pad - 3) + "..."
+        }
+
+        Write-Host ("{0,-$pad}" -f $towrite) -Fore $Color -NoNewLine:$nnl
+        if ($nnl) {
+            Write-Host "  " -NoNewLine
+        }
+
+        $LastDirectoryName = $DirectoryName
+    }
+
+    if ($nnl) {  # conditionally add an empty line
+        Write-Host ""
+        Write-Host ""
+    }
 }
 
 Export-ModuleMember -Function 'Get-*'
