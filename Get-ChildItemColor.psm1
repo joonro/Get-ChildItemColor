@@ -32,6 +32,25 @@ foreach ($Extension in $ConfigsList) {
     $ColorTable.Add($Extension, "DarkYellow")
 }
 
+
+Function Get-Color($Item) {
+    $Key = 'Default'
+
+    If ($Item.GetType().Name -eq 'DirectoryInfo') {
+        $Key = 'Directory'
+    } else {
+        If ($Item.PSobject.Properties.Name -contains "Extension") {
+            If ($ColorTable.ContainsKey($Item.Extension)) {
+                $Key = $Item.Extension
+            }
+        }
+    }
+
+    $Color = $ColorTable[$Key]
+    Return $Color
+}
+
+
 Function Get-ChildItemColor {
     Param(
         [string]$Path = ""
@@ -41,19 +60,7 @@ Function Get-ChildItemColor {
     $Items = Invoke-Expression $Expression
 
     ForEach ($Item in $Items) {
-        If ($Item.GetType().Name -eq 'DirectoryInfo') {
-            $Key = 'Directory'
-        } elseif ($Item.GetType().Name -eq 'DictionaryEntry') {
-            $Key = 'Default'
-        } else {
-            If ($ColorTable.ContainsKey($Item.Extension)) {
-                $Key = $Item.Extension
-            } else {
-                $Key = 'Default'
-            }
-        }
-
-        $Color = $ColorTable[$Key]
+        $Color = Get-Color $Item
 
         $Host.UI.RawUI.ForegroundColor = $Color
         $Item
@@ -86,25 +93,10 @@ Function Get-ChildItemColorFormatWide {
     $pad = [math]::Ceiling(($width + 2) / $cols) - 3
 
     ForEach ($Item in $Items) {
-        if ($Item.GetType().Name -eq 'DirectoryInfo') {
-            $DirectoryName = $Item.Parent.FullName
-            $Key = 'Directory'
-
-        } elseif ($Item.GetType().Name -eq "DictionaryEntry") {
-            $DirectoryName = $Item.DirectoryName
-            $Key = 'Default'
-
-        } else {
-            $DirectoryName = $Item.DirectoryName
-
-            If ($ColorTable.ContainsKey($Item.Extension)) {
-                $Key = $Item.Extension
-            } else {
-                $Key = 'Default'
             }
         }
 
-        $Color = $ColorTable[$Key]
+        $Color = Get-Color $Item
 
         if ($LastDirectoryName -ne $DirectoryName) {
             if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
