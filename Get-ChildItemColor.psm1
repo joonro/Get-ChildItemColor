@@ -12,23 +12,23 @@ $ColorTable = @{}
 $ColorTable.Add('Default', $OriginalForegroundColor) 
 $ColorTable.Add('Directory', "Green") 
 
-foreach ($Extension in $CompressedList) {
+ForEach ($Extension in $CompressedList) {
     $ColorTable.Add($Extension, "Yellow")
 }
 
-foreach ($Extension in $ExecutableList) {
+ForEach ($Extension in $ExecutableList) {
     $ColorTable.Add($Extension, "Blue")
 }
 
-foreach ($Extension in $TextList) {
+ForEach ($Extension in $TextList) {
     $ColorTable.Add($Extension, "Cyan")
 }
 
-foreach ($Extension in $DllPdbList) {
+ForEach ($Extension in $DllPdbList) {
     $ColorTable.Add($Extension, "DarkGreen")
 }
 
-foreach ($Extension in $ConfigsList) {
+ForEach ($Extension in $ConfigsList) {
     $ColorTable.Add($Extension, "DarkYellow")
 }
 
