@@ -93,16 +93,28 @@ Function Get-ChildItemColorFormatWide {
     $pad = [math]::Ceiling(($width + 2) / $cols) - 3
 
     ForEach ($Item in $Items) {
+        If ($Item.PSobject.Properties.Name -contains "PSParentPath") {
+            If ($Item.PSParentPath -match "FileSystem") {
+                $ParentType = "Directory"
+                $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
             }
+            ElseIf ($Item.PSParentPath -match "Registry") {
+                $ParentType = "Hive"
+                $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
+            }
+        } else {
+            $ParentType = ""
+            $ParentName = ""
+            $LastParentName = $ParentName
         }
 
         $Color = Get-Color $Item
 
-        if ($LastDirectoryName -ne $DirectoryName) {
+        if ($LastParentName -ne $ParentName) {
             if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
-            Write-Host -Fore $OriginalForegroundColor ("`n   Directory: $DirectoryName`n")
+            Write-Host -Fore $OriginalForegroundColor ("`n   $($ParentType): $ParentName`n")
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -119,7 +131,7 @@ Function Get-ChildItemColorFormatWide {
             Write-Host "  " -NoNewLine
         }
 
-        $LastDirectoryName = $DirectoryName
+        $LastParentName = $ParentName
     }
 
     if ($nnl) {  # conditionally add an empty line
