@@ -59,6 +59,8 @@ of =Get-ChildItem | Format-Wide= equivalent.
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.2.0
+- Robust to non-file entries (Issue #10)
 ** v1.1.0
 - Revert back to previous implementation of =Get-ChildItemColorFormatWide=
 ** v1.0.0
