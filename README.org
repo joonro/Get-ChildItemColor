@@ -1,11 +1,12 @@
-# Created 2017-04-25 Tue 12:57
+# Created 2017-05-03 Wed 20:27
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 - This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
   based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]] by [[http://thepowershellguy.com/][the PowerShell Guy]].
 - Before version 1.0.0, the script actually had used =Write-Host= to write
-  colored items on console. Now it just changes =$Host.UI.RawUI.ForegroundColor= and keep the item object intact. Hence, now one can use pipeline.
-  (e.g., =Get-ChildItemColor | grep ".git"= ).
+  colored items on console. Now it just changes
+  =$Host.UI.RawUI.ForegroundColor= and keep the item object intact. Hence, now
+  one can use pipeline. (e.g., ~Get-ChildItemColor | grep ".git"~).
 - =Get-ChildItemColorFormatWide= still uses =Write-Host= for output
   however. This is because =Get-ChildItemColor | Format-Wide= does not allow
   multiple colors in one line. Hence, pipeline does not work with
@@ -59,6 +60,8 @@ of =Get-ChildItem | Format-Wide= equivalent.
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.2.0
+- Robust to non-file entries (Issue #10)
 ** v1.1.0
 - Revert back to previous implementation of =Get-ChildItemColorFormatWide=
 ** v1.0.0
