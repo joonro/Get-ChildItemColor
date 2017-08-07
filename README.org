@@ -1,4 +1,4 @@
-# Created 2017-05-03 Wed 20:27
+# Created 2017-08-07 Mon 13:53
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 - This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -60,6 +60,9 @@ of =Get-ChildItem | Format-Wide= equivalent.
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.2.1
+- PR #13: Fallback to Gray when no =OriginalForegroundColor= (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Amikesigs][mikesigs]])
+- PR #12: Fix a typo (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Ajqly][jqly]])
 ** v1.2.0
 - Robust to non-file entries (Issue #10)
 ** v1.1.0
