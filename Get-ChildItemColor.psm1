@@ -1,4 +1,5 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
+if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
 $CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
 $ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
