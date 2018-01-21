@@ -39,7 +39,7 @@ Function Get-Color($Item) {
 
     If ($Item.GetType().Name -eq 'DirectoryInfo') {
         $Key = 'Directory'
-    } else {
+    } Else {
         If ($Item.PSobject.Properties.Name -contains "Extension") {
             If ($ColorTable.ContainsKey($Item.Extension)) {
                 $Key = $Item.Extension
@@ -86,9 +86,8 @@ Function Get-ChildItemColorFormatWide {
     $lnStr = $Items | Select-Object Name | Sort-Object { "$_".Length } -Descending | Select-Object -First 1
     $len = $lnStr.Name.Length
     $width = $Host.UI.RawUI.WindowSize.Width
-    $cols = If ($len) {($width + 1) / ($len + 2)} Else {1}
-    $cols = [math]::Floor($cols)
-    if (!$cols) {$cols=1}
+    $cols = If ($len) {[math]::Floor(($width + 1) / ($len + 2))} Else {1}
+    if (!$cols) {$cols = 1}
 
     $i = 0
     $pad = [math]::Ceiling(($width + 2) / $cols) - 3
@@ -103,7 +102,7 @@ Function Get-ChildItemColorFormatWide {
                 $ParentType = "Hive"
                 $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
             }
-        } else {
+        } Else {
             $ParentType = ""
             $ParentName = ""
             $LastParentName = $ParentName
@@ -111,8 +110,8 @@ Function Get-ChildItemColorFormatWide {
 
         $Color = Get-Color $Item
 
-        if ($LastParentName -ne $ParentName) {
-            if($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+        If ($LastParentName -ne $ParentName) {
+            If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
             Write-Host -Fore $OriginalForegroundColor ("`n   $($ParentType): $ParentName`n")
@@ -122,20 +121,20 @@ Function Get-ChildItemColorFormatWide {
 
         # truncate the item name
         $toWrite = $Item.Name
-        if ($toWrite.length -gt $pad) {
+        If ($toWrite.length -gt $pad) {
             $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
         }
 
         Write-Host ("{0,-$pad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
 
-        if ($nnl) {
+        If ($nnl) {
             Write-Host "  " -NoNewLine
         }
 
         $LastParentName = $ParentName
     }
 
-    if ($nnl) {  # conditionally add an empty line
+    If ($nnl) {  # conditionally add an empty line
         Write-Host ""
         Write-Host ""
     }
