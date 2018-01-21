@@ -1,4 +1,4 @@
-# Created 2017-08-07 Mon 13:53
+# Created 2018-01-21 Sun 12:18
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 - This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
@@ -44,11 +44,13 @@ Import-Module Get-ChildItemColor
 it exposes two functions, =Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
 
 You can add aliases to these functions for convenience. For example, I have
-the following in my =$PROFILE$= [fn:PathProfile]:
+the following in my profile[fn:pathProfile] (please do not put this into ISE
+profile[fn:pathProfileISE] as it does not work in ISE):
 
 #+BEGIN_SRC powershell
+#verify this is the console and not the ISE
 Import-Module Get-ChildItemColor
- 
+
 Set-Alias l Get-ChildItemColor -option AllScope
 Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 #+END_SRC
@@ -56,10 +58,15 @@ Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
 of =Get-ChildItem | Format-Wide= equivalent.
 
-[fn:PathProfile] =$ENV:UserProfile\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1=
+[fn:pathProfile] ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~
+
+[fn:pathProfileISE] ~$Home\[My ]Documents\WindowsPowerShell\Microsoft.PowerShellISE_profile.ps1~
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.2.2
+- Improve README (#15)
+- Beautify code
 ** v1.2.1
 - PR #13: Fallback to Gray when no =OriginalForegroundColor= (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Amikesigs][mikesigs]])
 - PR #12: Fix a typo (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Ajqly][jqly]])
