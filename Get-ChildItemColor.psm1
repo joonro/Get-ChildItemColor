@@ -136,7 +136,6 @@ Function Get-ChildItemColorFormatWide {
 
     If ($nnl) {  # conditionally add an empty line
         Write-Host ""
-        Write-Host ""
     }
 }
 
