@@ -1,28 +1,177 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-$CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
-$ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                    ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
-$DllPdbList = @(".dll", ".pdb")
-$TextList = @(".csv", ".log", ".markdown", ".rst", ".txt")
-$ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
+$CompressedList = @(
+    ".7z",
+    ".gz",
+    ".rar",
+    ".tar",
+    ".zip"
+)
+
+$ExecutableList = @(
+    ".exe",
+    ".bat",
+    ".cmd",
+    ".py",
+    ".pl",
+    ".ps1",
+    ".psm1",
+    ".vbs",
+    ".rb",
+    ".reg",
+    ".fsx",
+    ".sh"
+)
+
+$DllPdbList = @(
+    ".dll",
+    ".pdb"
+)
+
+$TextList = @(
+    ".csv",
+    ".log",
+    ".markdown",
+    ".md",
+    ".rst",
+    ".txt",
+    ".html",
+    ".css",
+    ".scss"
+)
+
+$ConfigsList = @(
+    ".cfg",
+    ".conf",
+    ".config",
+    ".ini",
+    ".json"
+)
+
+$SourceCodeList = @(
+    # Ada
+    ".adb", ".ads",
+
+    # C Programming language
+    ".c", ".h",
+
+    # C++
+    #".C", ".h"
+    ".cc", ".cpp", ".cxx", ".c++", ".hh", ".hpp", ".hxx", ".h++",
+
+    # C#
+    ".cs",
+
+    # COBOL
+    ".cbl", ".cob", ".cpy",
+
+    # Common Lisp
+    ".lisp", ".lsp", ".l", ".cl", ".fasl",
+
+    # Erlang
+    ".erl", ".hrl",
+
+    # F# Programming Language
+    #".fsx"
+    ".fs", ".fsi", ".fsscript",
+
+    # Fortran
+    ".f", ".for", ".f90",
+
+    # Go
+    ".go",
+
+    # Groovy
+    ".grooy",
+
+    # Haskell
+    ".hs", ".lhs",
+
+    # Java
+    ".java", ".class", ".jar",
+
+    # Objective C
+    ".m", ".mm",
+
+    # P Programming Language
+    ".p",
+
+    # Pascal
+    ".pp", ".pas", ".inc",
+
+    # Python
+    #".py"
+    ".pyc", ".pyd", ".pyo", ".pyw", ".pyz",
+
+    # Rust
+    ".rs", ".rlib",
+
+    # Scala
+    ".scala", ".sc",
+
+    # Scheme
+    ".scm", ".ss",
+
+    # Swift
+    ".swift",
+
+    # Clojure
+    ".clj", ".cljs", ".cljc", "edn",
+
+
+    # Perl
+    #".pl"
+    ".pm", ".t", ".pod",
+
+    # PHP
+    ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps", ".php-s", ".pht",
+
+    # R Programming Language
+    #".R"
+    ".r", ".RData", ".rds", ".rda",
+
+    # Unreal Script
+    ".uc", ".uci", ".upkg",
+
+    # PowerShell
+    #".ps1", ".psm1"
+    ".ps1xml", ".psc1", ".psd1", ".pssc", ".cdxml",
+
+    # SQL
+    ".sql",
+
+    # Prolog
+    #".P"
+    #".pl"
+    ".pro",
+
+    # VB Script
+    #".vbs", ".html"
+    ".vbe", ".wsf", ".wsc", ".hta", ".htm", ".asp",
+
+    # Javascript
+    ".js", ".mjs", ".ts", ".tsx"
+
+    # Ruby
+    #".rb"
+)
 
 $ColorTable = @{}
 
-$ColorTable.Add('Default', $OriginalForegroundColor) 
-$ColorTable.Add('Directory', "Green") 
+$ColorTable.Add('Default', $OriginalForegroundColor)
+$ColorTable.Add('Directory', "Magenta")
 
 ForEach ($Extension in $CompressedList) {
     $ColorTable.Add($Extension, "Yellow")
 }
 
 ForEach ($Extension in $ExecutableList) {
-    $ColorTable.Add($Extension, "Blue")
+    $ColorTable.Add($Extension, "Green")
 }
 
 ForEach ($Extension in $TextList) {
-    $ColorTable.Add($Extension, "Cyan")
+    $ColorTable.Add($Extension, "White")
 }
 
 ForEach ($Extension in $DllPdbList) {
@@ -30,7 +179,11 @@ ForEach ($Extension in $DllPdbList) {
 }
 
 ForEach ($Extension in $ConfigsList) {
-    $ColorTable.Add($Extension, "DarkYellow")
+    $ColorTable.Add($Extension, "Gray")
+}
+
+ForEach ($Extension in $SourceCodeList) {
+    $ColorTable.Add($Extension, "Cyan")
 }
 
 
