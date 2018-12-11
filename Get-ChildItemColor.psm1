@@ -11,18 +11,19 @@ $ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
 $ColorTable = @{}
 
 $ColorTable.Add('Default', $OriginalForegroundColor) 
-$ColorTable.Add('Directory', "Green") 
+$ColorTable.Add('Directory', "Blue") 
+$ColorTable.Add('Symlink', "Cyan") 
 
 ForEach ($Extension in $CompressedList) {
-    $ColorTable.Add($Extension, "Yellow")
+    $ColorTable.Add($Extension, "Red")
 }
 
 ForEach ($Extension in $ExecutableList) {
-    $ColorTable.Add($Extension, "Blue")
+    $ColorTable.Add($Extension, "Green")
 }
 
 ForEach ($Extension in $TextList) {
-    $ColorTable.Add($Extension, "Cyan")
+    $ColorTable.Add($Extension, "Yellow")
 }
 
 ForEach ($Extension in $DllPdbList) {
@@ -37,12 +38,16 @@ ForEach ($Extension in $ConfigsList) {
 Function Get-Color($Item) {
     $Key = 'Default'
 
-    If ($Item.GetType().Name -eq 'DirectoryInfo') {
-        $Key = 'Directory'
+    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        $Key = 'Symlink'
     } Else {
-        If ($Item.PSobject.Properties.Name -contains "Extension") {
-            If ($ColorTable.ContainsKey($Item.Extension)) {
-                $Key = $Item.Extension
+        If ($Item.GetType().Name -eq 'DirectoryInfo') {
+            $Key = 'Directory'
+        } Else {
+           If ($Item.PSobject.Properties.Name -contains "Extension") {
+                If ($ColorTable.ContainsKey($Item.Extension)) {
+                    $Key = $Item.Extension
+                }
             }
         }
     }
