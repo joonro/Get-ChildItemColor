@@ -12,19 +12,21 @@ $global:GetChildItemColorExtensions = @{
 
 $global:GetChildItemColorTable = @{
     Default = $OriginalForegroundColor
-    Directory = "Green"
 }
 
+$GetChildItemColorTable.Add('Directory', "Blue")
+$GetChildItemColorTable.Add('Symlink', "Cyan") 
+
 ForEach ($Extension in $GetChildItemColorExtensions.CompressedList) {
-    $GetChildItemColorTable.Add($Extension, "Yellow")
+    $GetChildItemColorTable.Add($Extension, "Red")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.ExecutableList) {
-    $GetChildItemColorTable.Add($Extension, "Blue")
+    $GetChildItemColorTable.Add($Extension, "Green")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.TextList) {
-    $GetChildItemColorTable.Add($Extension, "Cyan")
+    $GetChildItemColorTable.Add($Extension, "Yellow")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
@@ -39,12 +41,16 @@ ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
 Function Get-Color($Item) {
     $Key = 'Default'
 
-    If ($Item.GetType().Name -eq 'DirectoryInfo') {
-        $Key = 'Directory'
+    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        $Key = 'Symlink'
     } Else {
-        If ($Item.PSobject.Properties.Name -contains "Extension") {
-            If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
-                $Key = $Item.Extension
+        If ($Item.GetType().Name -eq 'DirectoryInfo') {
+            $Key = 'Directory'
+        } Else {
+           If ($Item.PSobject.Properties.Name -contains "Extension") {
+                If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
+                    $Key = $Item.Extension
+                }
             }
         }
     }
