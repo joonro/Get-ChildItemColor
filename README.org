@@ -81,6 +81,11 @@ ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.3.1
+- PR #21: Added ReparsePoint (symlink) detection, matched color scheme with
+  Linux (thanks to [[https://github.com/cmilanf][cmilanf]])
+- Make empty lines consistent between Get-ChildItemColor and
+  Get-ChildItemColorFormatWide (Fixes [[https://github.com/joonro/Get-ChildItemColor/issues/17][#17]])
 ** v1.3.0
 - PR [[https://github.com/joonro/Get-ChildItemColor/pull/23][#23]]: Added customizable color output. (thanks to [[https://github.com/asidlo][asidlo]])
 - Improve README
