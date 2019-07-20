@@ -1,30 +1,187 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-$global:GetChildItemColorExtensions = @{
-    CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
-    ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                        ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
-    DllPdbList = @(".dll", ".pdb")
-    TextList = @(".csv", ".log", ".markdown", ".rst", ".txt")
-    ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
-}
+$global:GetChildItemColorExtensions = @{}
+
+$GetChildItemColorExtensions.Add(
+    'CompressedList',
+    @(
+        ".7z",
+        ".gz",
+        ".rar",
+        ".tar",
+        ".zip"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'ExecutableList',
+    @(
+        ".exe",
+        ".bat",
+        ".cmd",
+        ".reg",
+        ".fsx",
+        ".sh"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'DllPdbList',
+    @(
+        ".dll",
+        ".pdb"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'TextList',
+    @(
+        ".csv",
+        ".log",
+        ".markdown",
+        ".md",
+        ".rst",
+        ".txt"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'ConfigsList',
+    @(
+        ".cfg",
+        ".conf",
+        ".config",
+        ".ini",
+        ".json"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'SourceCodeList',
+    @(
+        # Ada
+        ".adb", ".ads",
+
+        # C Programming language
+        ".c", ".h",
+
+        # C++
+        #".C", ".h"
+        ".cc", ".cpp", ".cxx", ".c++", ".hh", ".hpp", ".hxx", ".h++",
+
+        # C#
+        ".cs",
+
+        # COBOL
+        ".cbl", ".cob", ".cpy",
+
+        # Common Lisp
+        ".lisp", ".lsp", ".l", ".cl", ".fasl",
+
+        # Clojure
+        ".clj", ".cljs", ".cljc", "edn",
+
+        # Erlang
+        ".erl", ".hrl",
+
+        # F# Programming Language
+        #".fsx"
+        ".fs", ".fsi", ".fsscript",
+
+        # Fortran
+        ".f", ".for", ".f90",
+
+        # Go
+        ".go",
+
+        # Groovy
+        ".grooy",
+
+        # Haskell
+        ".hs", ".lhs",
+
+        # HTML
+        ".html", ".htm", ".hta", ".css", ".scss",
+        
+        # Java
+        ".java", ".class", ".jar",
+
+        # Javascript
+        ".js", ".mjs", ".ts", ".tsx"
+
+        # Objective C
+        ".m", ".mm",
+
+        # P Programming Language
+        ".p",
+
+        # Perl
+        ".pl", ".pm", ".t", ".pod",
+
+        # PHP
+        ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps", ".php-s", ".pht",
+
+        # Pascal
+        ".pp", ".pas", ".inc",
+
+        # PowerShell
+        ".ps1", ".psm1", ".ps1xml", ".psc1", ".psd1", ".pssc", ".cdxml",
+
+        # Prolog
+        #".P"
+        #".pl"
+        ".pro",
+
+        # Python
+        ".py", ".pyx", ".pyc", ".pyd", ".pyo", ".pyw", ".pyz",
+
+        # R Programming Language
+        ".r", ".RData", ".rds", ".rda",
+
+        # Ruby
+        ".rb"
+
+        # Rust
+        ".rs", ".rlib",
+
+        # Scala
+        ".scala", ".sc",
+
+        # Scheme
+        ".scm", ".ss",
+
+        # Swift
+        ".swift",
+
+        # Unreal Script
+        ".uc", ".uci", ".upkg",
+
+        # SQL
+        ".sql",
+
+        # VB Script
+        ".vbs", ".vbe", ".wsf", ".wsc", ".asp"
+    )
+)
 
 $global:GetChildItemColorTable = @{
     Default = $OriginalForegroundColor
-    Directory = "Green"
 }
 
+$GetChildItemColorTable.Add('Directory', "Blue")
+$GetChildItemColorTable.Add('Symlink', "Cyan") 
+
 ForEach ($Extension in $GetChildItemColorExtensions.CompressedList) {
-    $GetChildItemColorTable.Add($Extension, "Yellow")
+    $GetChildItemColorTable.Add($Extension, "Red")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.ExecutableList) {
-    $GetChildItemColorTable.Add($Extension, "Blue")
+    $GetChildItemColorTable.Add($Extension, "Green")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.TextList) {
-    $GetChildItemColorTable.Add($Extension, "Cyan")
+    $GetChildItemColorTable.Add($Extension, "Yellow")
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
@@ -32,6 +189,10 @@ ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
+    $GetChildItemColorTable.Add($Extension, "Gray")
+}
+
+ForEach ($Extension in $GetChildItemColorExtensions.SourceCodeList) {
     $GetChildItemColorTable.Add($Extension, "DarkYellow")
 }
 
@@ -39,12 +200,16 @@ ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
 Function Get-Color($Item) {
     $Key = 'Default'
 
-    If ($Item.GetType().Name -eq 'DirectoryInfo') {
-        $Key = 'Directory'
+    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        $Key = 'Symlink'
     } Else {
-        If ($Item.PSobject.Properties.Name -contains "Extension") {
-            If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
-                $Key = $Item.Extension
+        If ($Item.GetType().Name -eq 'DirectoryInfo') {
+            $Key = 'Directory'
+        } Else {
+           If ($Item.PSobject.Properties.Name -contains "Extension") {
+                If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
+                    $Key = $Item.Extension
+                }
             }
         }
     }
@@ -116,7 +281,7 @@ Function Get-ChildItemColorFormatWide {
             If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
-            Write-Host -Fore $OriginalForegroundColor ("`n   $($ParentType): $ParentName`n")
+            Write-Host -Fore $OriginalForegroundColor ("`n`n   $($ParentType): $ParentName`n`n")
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -136,8 +301,9 @@ Function Get-ChildItemColorFormatWide {
         $LastParentName = $ParentName
     }
 
+    Write-Host "`n"
+
     If ($nnl) {  # conditionally add an empty line
-        Write-Host ""
         Write-Host ""
     }
 }
