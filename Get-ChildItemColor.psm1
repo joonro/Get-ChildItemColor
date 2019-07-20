@@ -1,14 +1,169 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-$global:GetChildItemColorExtensions = @{
-    CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
-    ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                        ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
-    DllPdbList = @(".dll", ".pdb")
-    TextList = @(".csv", ".log", ".markdown", ".rst", ".txt")
-    ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
-}
+$global:GetChildItemColorExtensions = @{}
+
+$GetChildItemColorExtensions.Add(
+    'CompressedList',
+    @(
+        ".7z",
+        ".gz",
+        ".rar",
+        ".tar",
+        ".zip"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'ExecutableList',
+    @(
+        ".exe",
+        ".bat",
+        ".cmd",
+        ".reg",
+        ".fsx",
+        ".sh"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'DllPdbList',
+    @(
+        ".dll",
+        ".pdb"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'TextList',
+    @(
+        ".csv",
+        ".log",
+        ".markdown",
+        ".md",
+        ".rst",
+        ".txt"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'ConfigsList',
+    @(
+        ".cfg",
+        ".conf",
+        ".config",
+        ".ini",
+        ".json"
+    )
+)
+
+$GetChildItemColorExtensions.Add(
+    'SourceCodeList',
+    @(
+        # Ada
+        ".adb", ".ads",
+
+        # C Programming language
+        ".c", ".h",
+
+        # C++
+        #".C", ".h"
+        ".cc", ".cpp", ".cxx", ".c++", ".hh", ".hpp", ".hxx", ".h++",
+
+        # C#
+        ".cs",
+
+        # COBOL
+        ".cbl", ".cob", ".cpy",
+
+        # Common Lisp
+        ".lisp", ".lsp", ".l", ".cl", ".fasl",
+
+        # Clojure
+        ".clj", ".cljs", ".cljc", "edn",
+
+        # Erlang
+        ".erl", ".hrl",
+
+        # F# Programming Language
+        #".fsx"
+        ".fs", ".fsi", ".fsscript",
+
+        # Fortran
+        ".f", ".for", ".f90",
+
+        # Go
+        ".go",
+
+        # Groovy
+        ".grooy",
+
+        # Haskell
+        ".hs", ".lhs",
+
+        # HTML
+        ".html", ".htm", ".hta", ".css", ".scss",
+        
+        # Java
+        ".java", ".class", ".jar",
+
+        # Javascript
+        ".js", ".mjs", ".ts", ".tsx"
+
+        # Objective C
+        ".m", ".mm",
+
+        # P Programming Language
+        ".p",
+
+        # Perl
+        ".pl", ".pm", ".t", ".pod",
+
+        # PHP
+        ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps", ".php-s", ".pht",
+
+        # Pascal
+        ".pp", ".pas", ".inc",
+
+        # PowerShell
+        ".ps1", ".psm1", ".ps1xml", ".psc1", ".psd1", ".pssc", ".cdxml",
+
+        # Prolog
+        #".P"
+        #".pl"
+        ".pro",
+
+        # Python
+        ".py", ".pyx", ".pyc", ".pyd", ".pyo", ".pyw", ".pyz",
+
+        # R Programming Language
+        ".r", ".RData", ".rds", ".rda",
+
+        # Ruby
+        ".rb"
+
+        # Rust
+        ".rs", ".rlib",
+
+        # Scala
+        ".scala", ".sc",
+
+        # Scheme
+        ".scm", ".ss",
+
+        # Swift
+        ".swift",
+
+        # Unreal Script
+        ".uc", ".uci", ".upkg",
+
+        # SQL
+        ".sql",
+
+        # VB Script
+        ".vbs", ".vbe", ".wsf", ".wsc", ".asp"
+    )
+)
 
 $global:GetChildItemColorTable = @{
     Default = $OriginalForegroundColor
@@ -34,6 +189,10 @@ ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
 }
 
 ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
+    $GetChildItemColorTable.Add($Extension, "Gray")
+}
+
+ForEach ($Extension in $GetChildItemColorExtensions.SourceCodeList) {
     $GetChildItemColorTable.Add($Extension, "DarkYellow")
 }
 
