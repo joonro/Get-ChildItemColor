@@ -1,6 +1,7 @@
-# Created 2018-01-21 Sun 12:18
+# Created 2019-07-20 Sat 10:30
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
+
 - This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
   based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]] by [[http://thepowershellguy.com/][the PowerShell Guy]].
 - Before version 1.0.0, the script actually had used =Write-Host= to write
@@ -11,6 +12,7 @@
   however. This is because =Get-ChildItemColor | Format-Wide= does not allow
   multiple colors in one line. Hence, pipeline does not work with
   =Get-ChildItemColorFormatWide=.
+
 * Screenshot:
 ** Get-ChildItemColor
 [[file:./screenshots/Get-ChildItemColor.png]] 
@@ -31,15 +33,15 @@ Then, you can simply run =Install-Module Get-ChildItemColor= (or
 Clone the repo in your PowerShell Module folder
 (=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=).
 
-#+BEGIN_SRC sh
+#+begin_src sh
 git clone https://github.com/joonro/Get-ChildItemColor.git
-#+END_SRC
+#+end_src
 * Usage
 When you import the module:
 
-#+BEGIN_SRC powershell
+#+begin_src powershell
 Import-Module Get-ChildItemColor
-#+END_SRC
+#+end_src
 
 it exposes two functions, =Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
 
@@ -47,13 +49,14 @@ You can add aliases to these functions for convenience. For example, I have
 the following in my profile[fn:pathProfile] (please do not put this into ISE
 profile[fn:pathProfileISE] as it does not work in ISE):
 
-#+BEGIN_SRC powershell
-#verify this is the console and not the ISE
-Import-Module Get-ChildItemColor
-
-Set-Alias l Get-ChildItemColor -option AllScope
-Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
-#+END_SRC
+#+begin_src powershell
+If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not in the ISE
+    Import-Module Get-ChildItemColor
+    
+    Set-Alias l Get-ChildItemColor -option AllScope
+    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
+}
+#+end_src
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
 of =Get-ChildItem | Format-Wide= equivalent.
@@ -61,15 +64,34 @@ of =Get-ChildItem | Format-Wide= equivalent.
 [fn:pathProfile] ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~
 
 [fn:pathProfileISE] ~$Home\[My ]Documents\WindowsPowerShell\Microsoft.PowerShellISE_profile.ps1~
+
+** Customizing color
+One can dynamically change the color scheme for different items, thanks to [[https://github.com/asidlo][asidlo]]'s [[https://github.com/joonro/Get-ChildItemColor/pull/23][contribution]].
+See the example below.
+
+#+begin_src powershell
+# Change color for directories to Blue
+$GetChildItemColorTable['Directory'] = "Blue"
+
+# Change color for executables to Green
+ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
+    $GetChildItemColorTable[$Exe] = "Green"
+}
+#+end_src
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v1.3.0
+- PR [[https://github.com/joonro/Get-ChildItemColor/pull/23][#23]]: Added customizable color output. (thanks to [[https://github.com/asidlo][asidlo]])
+- Improve README
+** v1.2.3
+- Add LICENSE
 ** v1.2.2
 - Improve README (#15)
 - Beautify code
 ** v1.2.1
-- PR #13: Fallback to Gray when no =OriginalForegroundColor= (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Amikesigs][mikesigs]])
-- PR #12: Fix a typo (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%253Apr+author%253Ajqly][jqly]])
+- PR #13: Fallback to Gray when no =OriginalForegroundColor= (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%3Apr+author%3Amikesigs][mikesigs]])
+- PR #12: Fix a typo (thanks to [[https://github.com/joonro/Get-ChildItemColor/issues?q=is%3Apr+author%3Ajqly][jqly]])
 ** v1.2.0
 - Robust to non-file entries (Issue #10)
 ** v1.1.0
