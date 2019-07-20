@@ -281,7 +281,7 @@ Function Get-ChildItemColorFormatWide {
             If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
-            Write-Host -Fore $OriginalForegroundColor ("`n   $($ParentType): $ParentName`n")
+            Write-Host -Fore $OriginalForegroundColor ("`n`n   $($ParentType): $ParentName`n`n")
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -301,8 +301,9 @@ Function Get-ChildItemColorFormatWide {
         $LastParentName = $ParentName
     }
 
+    Write-Host "`n"
+
     If ($nnl) {  # conditionally add an empty line
-        Write-Host ""
         Write-Host ""
     }
 }
