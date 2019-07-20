@@ -1,36 +1,38 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-$CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
-$ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                    ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
-$DllPdbList = @(".dll", ".pdb")
-$TextList = @(".csv", ".log", ".markdown", ".rst", ".txt")
-$ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
-
-$ColorTable = @{}
-
-$ColorTable.Add('Default', $OriginalForegroundColor) 
-$ColorTable.Add('Directory', "Green") 
-
-ForEach ($Extension in $CompressedList) {
-    $ColorTable.Add($Extension, "Yellow")
+$global:GetChildItemColorExtensions = @{
+    CompressedList = @(".7z", ".gz", ".rar", ".tar", ".zip")
+    ExecutableList = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
+                        ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
+    DllPdbList = @(".dll", ".pdb")
+    TextList = @(".csv", ".log", ".markdown", ".rst", ".txt")
+    ConfigsList = @(".cfg", ".conf", ".config", ".ini", ".json")
 }
 
-ForEach ($Extension in $ExecutableList) {
-    $ColorTable.Add($Extension, "Blue")
+$global:GetChildItemColorTable = @{
+    Default = $OriginalForegroundColor
+    Directory = "Green"
 }
 
-ForEach ($Extension in $TextList) {
-    $ColorTable.Add($Extension, "Cyan")
+ForEach ($Extension in $GetChildItemColorExtensions.CompressedList) {
+    $GetChildItemColorTable.Add($Extension, "Yellow")
 }
 
-ForEach ($Extension in $DllPdbList) {
-    $ColorTable.Add($Extension, "DarkGreen")
+ForEach ($Extension in $GetChildItemColorExtensions.ExecutableList) {
+    $GetChildItemColorTable.Add($Extension, "Blue")
 }
 
-ForEach ($Extension in $ConfigsList) {
-    $ColorTable.Add($Extension, "DarkYellow")
+ForEach ($Extension in $GetChildItemColorExtensions.TextList) {
+    $GetChildItemColorTable.Add($Extension, "Cyan")
+}
+
+ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
+    $GetChildItemColorTable.Add($Extension, "DarkGreen")
+}
+
+ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
+    $GetChildItemColorTable.Add($Extension, "DarkYellow")
 }
 
 
@@ -41,13 +43,13 @@ Function Get-Color($Item) {
         $Key = 'Directory'
     } Else {
         If ($Item.PSobject.Properties.Name -contains "Extension") {
-            If ($ColorTable.ContainsKey($Item.Extension)) {
+            If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
                 $Key = $Item.Extension
             }
         }
     }
 
-    $Color = $ColorTable[$Key]
+    $Color = $GetChildItemColorTable[$Key]
     Return $Color
 }
 
