@@ -48,7 +48,7 @@ function FileInfo {
        $script:showHeader=$false
     }
 
-    $Color = Get-Color $Item
+    $Color = Get-FileColor $Item
 
     Write-Color-LS $Color $Item
 }

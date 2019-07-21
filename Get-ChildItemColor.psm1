@@ -3,7 +3,7 @@ if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalF
 
 . "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
-Function Get-Color($Item) {
+Function Get-FileColor($Item) {
     $Key = 'Default'
 
     if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
@@ -20,7 +20,7 @@ Function Get-Color($Item) {
         }
     }
 
-    $Color = $GetChildItemColorTable[$Key]
+    $Color = $GetChildItemColorTable.File[$Key]
     Return $Color
 }
 
@@ -33,7 +33,7 @@ Function Get-ChildItemColor {
     $Items = Invoke-Expression $Expression
 
     ForEach ($Item in $Items) {
-        $Color = Get-Color $Item
+        $Color = Get-FileColor $Item
 
         $Host.UI.RawUI.ForegroundColor = $Color
         $Item
@@ -80,7 +80,7 @@ Function Get-ChildItemColorFormatWide {
             $LastParentName = $ParentName
         }
 
-        $Color = Get-Color $Item
+        $Color = Get-FileColor $Item
 
         If ($LastParentName -ne $ParentName) {
             If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
