@@ -1,12 +1,12 @@
 # Helper method for simulating ellipsis
 function CutString
 {
-    param ([string]$message, $length)
+    param ([string]$Message, $length)
 
-    if ($message.length -gt $length)
+    if ($Message.length -gt $length)
     {
-        return $message.SubString(0, $length-3) + '...'
+        return $Message.SubString(0, $length-3) + '...'
     }
 
-    return $message
+    Return $Message
 }
