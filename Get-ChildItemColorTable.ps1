@@ -162,8 +162,10 @@ $GetChildItemColorExtensions.Add(
     )
 )
 
-$global:GetChildItemColorTable = @{
+$Global:GetChildItemColorTable = @{
     File = @{ Default = $OriginalForegroundColor }
+    Service = @{ Default = $OriginalForegroundColor }
+    Match = @{ Default = $OriginalForegroundColor }
 }
 
 $GetChildItemColorTable.File.Add('Directory', "Blue")
@@ -192,3 +194,10 @@ ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
 ForEach ($Extension in $GetChildItemColorExtensions.SourceCodeList) {
     $GetChildItemColorTable.File.Add($Extension, "DarkYellow")
 }
+
+$GetChildItemColorTable.Service.Add('Running', "DarkGreen")
+$GetChildItemColorTable.Service.Add('Stopped', "DarkRed")
+
+$GetChildItemColorTable.Match.Add('Path', "Cyan")
+$GetChildItemColorTable.Match.Add('LineNumber', "Yellow")
+$GetChildItemColorTable.Match.Add('Line', $OriginalForegroundColor)
