@@ -78,6 +78,12 @@ ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
     $GetChildItemColorTable[$Exe] = "Green"
 }
 #+end_src
+** Customizing vertical space
+You can adjust the vertical spacing using =$Global:GetChildItemColorVerticalSpace=. Default is 1.
+
+#+begin_src powershell
+$Global:GetChildItemColorVerticalSpace = 1
+#+end_src
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog

@@ -38,8 +38,14 @@ function FileInfo {
        Write-Host
        Write-Host "    Directory: " -noNewLine
        Write-Host " $(pwd)`n" -ForegroundColor $Color
+
+       For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+           Write-Host ""
+       }
+
        Write-Host "Mode                LastWriteTime     Length Name"
        Write-Host "----                -------------     ------ ----"
+
        $Script:showHeader=$false
     }
 

@@ -1,6 +1,8 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
+$Global:GetChildItemColorVerticalSpace = 1
+
 . "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
 Function Get-FileColor($Item) {
@@ -83,13 +85,23 @@ Function Get-ChildItemColorFormatWide {
         $Color = Get-FileColor $Item
 
         If ($LastParentName -ne $ParentName) {
-            If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+            If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
-            Write-Host -Fore $OriginalForegroundColor "`n`n   $($ParentType):" -NoNewline
+
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
+            Write-Host -Fore $OriginalForegroundColor "   $($ParentType):" -NoNewline
 
             $Color = $GetChildItemColorTable.File['Directory']
-            Write-Host -Fore $Color " $ParentName`n`n"
+            Write-Host -Fore $Color " $ParentName"
+
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -109,7 +121,9 @@ Function Get-ChildItemColorFormatWide {
         $LastParentName = $ParentName
     }
 
-    Write-Host "`n"
+    For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+        Write-Host ""
+    }
 
     If ($nnl) {  # conditionally add an empty line
         Write-Host ""
@@ -139,6 +153,10 @@ function Out-Default {
     begin
     {
         try {
+            For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
             $outBuffer = $null
             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
             {
@@ -185,7 +203,10 @@ function Out-Default {
     end
     {
         try {
-            write-host ""
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
             $script:showHeader=$true
             $steppablePipeline.End()
         } catch {
