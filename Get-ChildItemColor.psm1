@@ -1,7 +1,7 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-. "$PSScriptRoot\ColorTable.ps1"
+. "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
 Function Get-Color($Item) {
     $Key = 'Default'
