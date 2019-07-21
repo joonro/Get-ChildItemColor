@@ -90,17 +90,19 @@ ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
 }
 #+end_src
 ** Customizing vertical space
-You can adjust the vertical spacing using =$Global:GetChildItemColorVerticalSpace=. Default is 1.
+You can adjust the vertical spacing using =$Global:GetChildItemColorVerticalSpace=. Default is 1 (PowerShell's 
+default is 2).
 
 #+begin_src powershell
 $Global:GetChildItemColorVerticalSpace = 1
 #+end_src
 * Authors
-- [[http://github.com/joonro][Joon Ro]]
+- [[http://github.com/joonro][Joon Ro]].
 * Changelog
 ** v2.0.0
 - Incorporate [[https://github.com/Davlind/PSColor][PSColor]]'s implementation of coloring the output of
   =Get-ChildItem=.
+- Add =$Global:GetChildItemColorVerticalSpace= option.
 ** v1.3.1
 - PR #21: Added ReparsePoint (symlink) detection, matched color scheme with
   Linux (thanks to [[https://github.com/cmilanf][cmilanf]])
