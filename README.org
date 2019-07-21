@@ -2,26 +2,36 @@
 #+TITLE: Get-ChildItemColor
 #+AUTHOR: Joon Ro
 
-- This adds colors to the output of =Get-ChildItem= Cmdlet of PowerShell. It is
-  based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script]] and another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]] by [[http://thepowershellguy.com/][the PowerShell Guy]].
-- Before version 1.0.0, the script actually had used =Write-Host= to write
-  colored items on console. Now it just changes
-  =$Host.UI.RawUI.ForegroundColor= and keep the item object intact. Hence, now
-  one can use pipeline. (e.g., ~Get-ChildItemColor | grep ".git"~).
-- =Get-ChildItemColorFormatWide= still uses =Write-Host= for output
-  however. This is because =Get-ChildItemColor | Format-Wide= does not allow
-  multiple colors in one line. Hence, pipeline does not work with
-  =Get-ChildItemColorFormatWide=.
+=Get-ChildItemColor= provides colorization of outputs of ~Get-ChildItem~
+Cmdlet of PowerShell. It is based on Tim Johnson's [[http://tasteofpowershell.blogspot.com/2009/02/get-childitem-dir-results-color-coded.html][script,]] another [[http://mow001.blogspot.com/2006/01/colorized-msh-ls-replacement.html][script]]
+by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.com/Davlind/PSColor][PSColor]]. 
+
+It provides two main functionalities:
+
+1. Directly provide coloring outputs of ~Get-ChildItem~ by modifying
+   ~Out-Default~. Once the module is imported, ~Get-ChildItem~'s output will
+   be automatically colored. It does support pipeline (e.g., ~Get-ChildItem |
+   grep ".git"~). Also, now the directory name and the headers of its output
+   have consistent colors. This is an adaptation of [[https://github.com/Davlind/PSColor][PSColor]].
+2. It provides =Get-ChildItemColorFormatWide=, which uses =Write-Host= to
+   output coloring. This is because =Get-ChildItemColor | Format-Wide= does
+   not allow multiple colors in one line. As a result, pipeline does not work with
+   =Get-ChildItemColorFormatWide=.
+
+It also provides ~Get-ChildItemColor~, which just changes
+=$Host.UI.RawUI.ForegroundColor= and keep the item object intact. This was the
+implementation before v2.0.0, and it does support pipeline. (e.g.,
+~Get-ChildItemColor | grep ".git"~). The main shortcoming of this approach is
+that the directory name and the headers of its output have inconsistent
+colors.
 
 * Screenshot:
-** Get-ChildItemColor
-[[file:./screenshots/Get-ChildItemColor.png]] 
+** Get-ChildItem (Colorized)
+[[file:./screenshots/Get-ChildItem.png]] 
 ** Get-ChildItemColorFormatWide (=ls= equivalent)
 [[file:./screenshots/Get-ChildItemColorFormatWide.png]] 
-* Notes on the code
-- It uses a hash table instead of regular expressions to specify colors
-- Recognize the =DictionaryEntry= case (e.g., =Get-ChildItemColor env:=)
-- Color support for =| Format-Wide= format (=ls= equivalent) with custom script
+** Get-ChildItemColor
+[[file:./screenshots/Get-ChildItemColor.png]] 
 * Install
 ** Install from [[https://www.powershellgallery.com/packages/Get-ChildItemColor/][PowerShellGallery]]
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
@@ -43,7 +53,8 @@ When you import the module:
 Import-Module Get-ChildItemColor
 #+end_src
 
-it exposes two functions, =Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
+it provides a proxy function for =Output-Default=, as well as two functions,
+=Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
 
 You can add aliases to these functions for convenience. For example, I have
 the following in my profile[fn:pathProfile] (please do not put this into ISE
@@ -53,7 +64,7 @@ profile[fn:pathProfileISE] as it does not work in ISE):
 If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not in the ISE
     Import-Module Get-ChildItemColor
     
-    Set-Alias l Get-ChildItemColor -option AllScope
+    Set-Alias l Get-ChildItem -option AllScope
     Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 }
 #+end_src
@@ -71,11 +82,11 @@ See the example below.
 
 #+begin_src powershell
 # Change color for directories to Blue
-$GetChildItemColorTable['Directory'] = "Blue"
+$GetChildItemColorTable.File['Directory'] = "Blue"
 
 # Change color for executables to Green
 ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
-    $GetChildItemColorTable[$Exe] = "Green"
+    $GetChildItemColorTable.File[$Exe] = "Green"
 }
 #+end_src
 ** Customizing vertical space
@@ -87,6 +98,9 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]]
 * Changelog
+** v2.0.0
+- Incorporate [[https://github.com/Davlind/PSColor][PSColor]]'s implementation of coloring the output of
+  =Get-ChildItem=.
 ** v1.3.1
 - PR #21: Added ReparsePoint (symlink) detection, matched color scheme with
   Linux (thanks to [[https://github.com/cmilanf][cmilanf]])
