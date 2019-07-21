@@ -24,7 +24,6 @@ Function Get-Color($Item) {
     Return $Color
 }
 
-
 Function Get-ChildItemColor {
     Param(
         [string]$Path = ""
@@ -114,9 +113,6 @@ Function Get-ChildItemColorFormatWide {
     }
 }
 
-Export-ModuleMember -Function 'Get-*'
-
-
 Add-Type -assemblyname System.ServiceProcess
 
 . "$PSScriptRoot\PSColorHelper.ps1"
@@ -201,5 +197,4 @@ function Out-Default {
     #>
 }
 
-Export-ModuleMember Out-Default
-
+Export-ModuleMember -Function Out-Default, 'Get-*'
