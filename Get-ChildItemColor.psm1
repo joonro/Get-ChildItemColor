@@ -82,8 +82,6 @@ Function Get-ChildItemColorFormatWide {
             $LastParentName = $ParentName
         }
 
-        $Color = Get-FileColor $Item
-
         If ($LastParentName -ne $ParentName) {
             If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
@@ -112,6 +110,7 @@ Function Get-ChildItemColorFormatWide {
             $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
         }
 
+        $Color = Get-FileColor $Item
         Write-Host ("{0,-$pad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
 
         If ($nnl) {
