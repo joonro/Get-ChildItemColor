@@ -40,9 +40,12 @@ function FileInfo {
 
     if($script:showHeader)
     {
+
+       $Color = $GetChildItemColorTable.File['Directory']
+
        Write-Host
        Write-Host "    Directory: " -noNewLine
-       Write-Host " $(pwd)`n" -foregroundcolor "Green"
+       Write-Host " $(pwd)`n" -ForegroundColor $Color
        Write-Host "Mode                LastWriteTime     Length Name"
        Write-Host "----                -------------     ------ ----"
        $script:showHeader=$false
