@@ -15,7 +15,7 @@ Function Get-FileColor($Item) {
             $Key = 'Directory'
         } Else {
            If ($Item.PSobject.Properties.Name -contains "Extension") {
-                If ($GetChildItemColorTable.ContainsKey($Item.Extension)) {
+               If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
                     $Key = $Item.Extension
                 }
             }
