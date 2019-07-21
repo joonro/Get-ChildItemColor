@@ -1,203 +1,11 @@
 $OriginalForegroundColor = $Host.UI.RawUI.ForegroundColor
 if ([System.Enum]::IsDefined([System.ConsoleColor], 1) -eq "False") { $OriginalForegroundColor = "Gray" }
 
-$global:GetChildItemColorExtensions = @{}
+$Global:GetChildItemColorVerticalSpace = 1
 
-$GetChildItemColorExtensions.Add(
-    'CompressedList',
-    @(
-        ".7z",
-        ".gz",
-        ".rar",
-        ".tar",
-        ".zip"
-    )
-)
+. "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
-$GetChildItemColorExtensions.Add(
-    'ExecutableList',
-    @(
-        ".exe",
-        ".bat",
-        ".cmd",
-        ".reg",
-        ".fsx",
-        ".sh"
-    )
-)
-
-$GetChildItemColorExtensions.Add(
-    'DllPdbList',
-    @(
-        ".dll",
-        ".pdb"
-    )
-)
-
-$GetChildItemColorExtensions.Add(
-    'TextList',
-    @(
-        ".csv",
-        ".log",
-        ".markdown",
-        ".md",
-        ".rst",
-        ".txt"
-    )
-)
-
-$GetChildItemColorExtensions.Add(
-    'ConfigsList',
-    @(
-        ".cfg",
-        ".conf",
-        ".config",
-        ".ini",
-        ".json"
-    )
-)
-
-$GetChildItemColorExtensions.Add(
-    'SourceCodeList',
-    @(
-        # Ada
-        ".adb", ".ads",
-
-        # C Programming language
-        ".c", ".h",
-
-        # C++
-        #".C", ".h"
-        ".cc", ".cpp", ".cxx", ".c++", ".hh", ".hpp", ".hxx", ".h++",
-
-        # C#
-        ".cs",
-
-        # COBOL
-        ".cbl", ".cob", ".cpy",
-
-        # Common Lisp
-        ".lisp", ".lsp", ".l", ".cl", ".fasl",
-
-        # Clojure
-        ".clj", ".cljs", ".cljc", "edn",
-
-        # Erlang
-        ".erl", ".hrl",
-
-        # F# Programming Language
-        #".fsx"
-        ".fs", ".fsi", ".fsscript",
-
-        # Fortran
-        ".f", ".for", ".f90",
-
-        # Go
-        ".go",
-
-        # Groovy
-        ".grooy",
-
-        # Haskell
-        ".hs", ".lhs",
-
-        # HTML
-        ".html", ".htm", ".hta", ".css", ".scss",
-        
-        # Java
-        ".java", ".class", ".jar",
-
-        # Javascript
-        ".js", ".mjs", ".ts", ".tsx"
-
-        # Objective C
-        ".m", ".mm",
-
-        # P Programming Language
-        ".p",
-
-        # Perl
-        ".pl", ".pm", ".t", ".pod",
-
-        # PHP
-        ".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps", ".php-s", ".pht",
-
-        # Pascal
-        ".pp", ".pas", ".inc",
-
-        # PowerShell
-        ".ps1", ".psm1", ".ps1xml", ".psc1", ".psd1", ".pssc", ".cdxml",
-
-        # Prolog
-        #".P"
-        #".pl"
-        ".pro",
-
-        # Python
-        ".py", ".pyx", ".pyc", ".pyd", ".pyo", ".pyw", ".pyz",
-
-        # R Programming Language
-        ".r", ".RData", ".rds", ".rda",
-
-        # Ruby
-        ".rb"
-
-        # Rust
-        ".rs", ".rlib",
-
-        # Scala
-        ".scala", ".sc",
-
-        # Scheme
-        ".scm", ".ss",
-
-        # Swift
-        ".swift",
-
-        # Unreal Script
-        ".uc", ".uci", ".upkg",
-
-        # SQL
-        ".sql",
-
-        # VB Script
-        ".vbs", ".vbe", ".wsf", ".wsc", ".asp"
-    )
-)
-
-$global:GetChildItemColorTable = @{
-    Default = $OriginalForegroundColor
-}
-
-$GetChildItemColorTable.Add('Directory', "Blue")
-$GetChildItemColorTable.Add('Symlink', "Cyan") 
-
-ForEach ($Extension in $GetChildItemColorExtensions.CompressedList) {
-    $GetChildItemColorTable.Add($Extension, "Red")
-}
-
-ForEach ($Extension in $GetChildItemColorExtensions.ExecutableList) {
-    $GetChildItemColorTable.Add($Extension, "Green")
-}
-
-ForEach ($Extension in $GetChildItemColorExtensions.TextList) {
-    $GetChildItemColorTable.Add($Extension, "Yellow")
-}
-
-ForEach ($Extension in $GetChildItemColorExtensions.DllPdbList) {
-    $GetChildItemColorTable.Add($Extension, "DarkGreen")
-}
-
-ForEach ($Extension in $GetChildItemColorExtensions.ConfigsList) {
-    $GetChildItemColorTable.Add($Extension, "Gray")
-}
-
-ForEach ($Extension in $GetChildItemColorExtensions.SourceCodeList) {
-    $GetChildItemColorTable.Add($Extension, "DarkYellow")
-}
-
-
-Function Get-Color($Item) {
+Function Get-FileColor($Item) {
     $Key = 'Default'
 
     if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
@@ -214,10 +22,9 @@ Function Get-Color($Item) {
         }
     }
 
-    $Color = $GetChildItemColorTable[$Key]
+    $Color = $GetChildItemColorTable.File[$Key]
     Return $Color
 }
-
 
 Function Get-ChildItemColor {
     Param(
@@ -228,7 +35,7 @@ Function Get-ChildItemColor {
     $Items = Invoke-Expression $Expression
 
     ForEach ($Item in $Items) {
-        $Color = Get-Color $Item
+        $Color = Get-FileColor $Item
 
         $Host.UI.RawUI.ForegroundColor = $Color
         $Item
@@ -275,13 +82,24 @@ Function Get-ChildItemColorFormatWide {
             $LastParentName = $ParentName
         }
 
-        $Color = Get-Color $Item
-
         If ($LastParentName -ne $ParentName) {
-            If($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+            If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
-            Write-Host -Fore $OriginalForegroundColor ("`n`n   $($ParentType): $ParentName`n`n")
+
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
+            Write-Host -Fore $OriginalForegroundColor "   $($ParentType):" -NoNewline
+
+            $Color = $GetChildItemColorTable.File['Directory']
+            Write-Host -Fore $Color " $ParentName"
+
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -292,6 +110,7 @@ Function Get-ChildItemColorFormatWide {
             $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
         }
 
+        $Color = Get-FileColor $Item
         Write-Host ("{0,-$pad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
 
         If ($nnl) {
@@ -301,11 +120,104 @@ Function Get-ChildItemColorFormatWide {
         $LastParentName = $ParentName
     }
 
-    Write-Host "`n"
+    For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+        Write-Host ""
+    }
 
     If ($nnl) {  # conditionally add an empty line
         Write-Host ""
     }
 }
 
-Export-ModuleMember -Function 'Get-*'
+Add-Type -assemblyname System.ServiceProcess
+
+. "$PSScriptRoot\PSColorHelper.ps1"
+. "$PSScriptRoot\FileInfo.ps1"
+. "$PSScriptRoot\ServiceController.ps1"
+. "$PSScriptRoot\MatchInfo.ps1"
+. "$PSScriptRoot\ProcessInfo.ps1"
+
+$script:showHeader=$true
+
+function Out-Default {
+    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
+    param(
+        [switch]
+        ${Transcript},
+
+        [Parameter(Position=0, ValueFromPipeline=$true)]
+        [psobject]
+        ${InputObject})
+
+    begin
+    {
+        try {
+            For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
+            {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Core\Out-Default', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline()
+            $steppablePipeline.Begin($PSCmdlet)
+        } catch {
+            throw
+        }
+    }
+
+    process
+    {
+        try {
+            if(($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo]))
+            {
+                FileInfo $_
+                $_ = $null
+            }
+
+            elseif($_ -is [System.ServiceProcess.ServiceController])
+            {
+                ServiceController $_
+                $_ = $null
+            }
+
+            elseif($_ -is [Microsoft.Powershell.Commands.MatchInfo])
+            {
+                MatchInfo $_
+                $_ = $null
+            }
+            else {
+                $steppablePipeline.Process($_)
+            }
+        } catch {
+            throw
+        }
+    }
+
+    end
+    {
+        try {
+            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                Write-Host ""
+            }
+
+            $script:showHeader=$true
+            $steppablePipeline.End()
+        } catch {
+            throw
+        }
+    }
+    <#
+
+    .ForwardHelpTargetName Out-Default
+    .ForwardHelpCategory Function
+
+    #>
+}
+
+Export-ModuleMember -Function Out-Default, 'Get-*'
