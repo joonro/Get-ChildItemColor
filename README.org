@@ -37,8 +37,9 @@ colors.
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
 are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.com/en-us/download/details.aspx?id=49186][PowerShellGet]].
 
-Then, you can simply run =Install-Module Get-ChildItemColor= (or
-=Install-Module Get-ChildItemColor -Scope CurrentUser=).
+Then, you can run =Install-Module -AllowClobber Get-ChildItemColor=. Note that
+you need =-AllowClobber= option so =Get-ChildItemColor= may override the
+existing command =Out-Default=.
 ** Install from GitHub
 After cloning the repo, you can put files in =/src= folder into
 =Get-ChildItemColor= folder under your PowerShell Module folder
