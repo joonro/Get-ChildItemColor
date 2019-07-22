@@ -10,7 +10,7 @@
 RootModule = 'Get-ChildItemColor.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.0.0'
+ModuleVersion = '2.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -28,7 +28,7 @@ CompanyName = ''
 Copyright = '(c) 2019 Joon Ro. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Get-ChildItemColor provides colored version of Get-ChildItem Cmdlet and Get-ChildItem | Format-Wide (ls equivalent)'
+Description = 'Get-ChildItemColor provides colored versions of Get-ChildItem Cmdlet and Get-ChildItem | Format-Wide (ls equivalent)'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
