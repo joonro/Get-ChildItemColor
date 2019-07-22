@@ -100,6 +100,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.1.0
+- Re-organize folder structure
 ** v2.0.0
 - Incorporate [[https://github.com/Davlind/PSColor][PSColor]]'s implementation of coloring the output of
   =Get-ChildItem=.
