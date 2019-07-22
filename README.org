@@ -51,8 +51,10 @@ When you import the module:
 Import-Module Get-ChildItemColor
 #+end_src
 
-it provides a proxy function for =Output-Default=, as well as two functions,
-=Get-ChildItemColor= and =Get-ChildItemColorFormatWide=.
+it provides a proxy function for =Output-Default=, so =Get-ChildItem='s output
+will be automatically colored. In addition, it provides two functions,
+=Get-ChildItemColorFormatWide= and =Get-ChildItemColor= (the latter is
+unlikely to be useful, but remained intact just in case).
 
 You can add aliases to these functions for convenience. For example, I have
 the following in my profile[fn:pathProfile] (please do not put this into ISE
