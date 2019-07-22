@@ -40,12 +40,10 @@ are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.
 Then, you can simply run =Install-Module Get-ChildItemColor= (or
 =Install-Module Get-ChildItemColor -Scope CurrentUser=).
 ** Install from GitHub
-Clone the repo in your PowerShell Module folder
-(=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=).
-
-#+begin_src sh
-git clone https://github.com/joonro/Get-ChildItemColor.git
-#+end_src
+After cloning the repo, you can put files in =/src= folder into
+=Get-ChildItemColor= folder under your PowerShell Module folder
+(=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=). The =master= branch
+always contains the latest release version.
 * Usage
 When you import the module:
 
