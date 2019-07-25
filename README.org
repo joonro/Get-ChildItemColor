@@ -100,6 +100,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.1.1
+- BUGFIX: Print directory names correctly when =-Recurse= option is used
 ** v2.1.0
 - Re-organize folder structure
 ** v2.0.0
