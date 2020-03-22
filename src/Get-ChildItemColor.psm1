@@ -57,8 +57,8 @@ Function Get-ChildItemColorFormatWide {
 
     $Items = Invoke-Expression $Expression
 
-    $lnStr = $Items | Select-Object Name | Sort-Object { "$_".Length } -Descending | Select-Object -First 1
-    $len = $lnStr.Name.Length
+    $lnStr = $Items | Select-Object Name | Sort-Object { $Host.UI.RawUI.LengthInBufferCells("$_") } -Descending | Select-Object -First 1
+    $len = $Host.UI.RawUI.LengthInBufferCells($lnStr.Name)
     $width = $Host.UI.RawUI.WindowSize.Width
     $cols = If ($len) {[math]::Floor(($width + 1) / ($len + 2))} Else {1}
     if (!$cols) {$cols = 1}
@@ -106,12 +106,13 @@ Function Get-ChildItemColorFormatWide {
 
         # truncate the item name
         $toWrite = $Item.Name
-        If ($toWrite.length -gt $pad) {
+        If ($Host.UI.RawUI.LengthInBufferCells($toWrite) -gt $pad) {
             $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
         }
 
         $Color = Get-FileColor $Item
-        Write-Host ("{0,-$pad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
+        $widePad = $pad - ($Host.UI.RawUI.LengthInBufferCells($toWrite) - $toWrite.Length)
+        Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
 
         If ($nnl) {
             Write-Host "  " -NoNewLine
