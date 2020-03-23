@@ -100,6 +100,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.0
+- Fix #27, Display issue with Chinese. (Thanks to [[https://github.com/shiena][shiena]])
 ** v2.1.1
 - BUGFIX: Print directory names correctly when =-Recurse= option is used
 ** v2.1.0
