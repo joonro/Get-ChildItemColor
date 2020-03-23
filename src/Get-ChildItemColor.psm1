@@ -107,7 +107,7 @@ Function Get-ChildItemColorFormatWide {
         # truncate the item name
         $toWrite = $Item.Name
         If ($Host.UI.RawUI.LengthInBufferCells($toWrite) -gt $pad) {
-            $toWrite = $toWrite.Substring(0, $pad - 3) + "..."
+            $toWrite = (CutString $toWrite $pad)
         }
 
         $Color = Get-FileColor $Item

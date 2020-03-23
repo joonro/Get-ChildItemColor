@@ -3,9 +3,17 @@ function CutString
 {
     param ([string]$Message, $length)
 
-    if ($Message.length -gt $length)
+    $len = 0
+    $count = 0
+    $max = $length - 3
+    ForEach ($c in $Message.ToCharArray())
     {
-        return $Message.SubString(0, $length-3) + '...'
+        $len += $Host.UI.RawUI.LengthInBufferCells($c)
+        if ($len -gt $max)
+        {
+            Return $Message.SubString(0, $count) + '...'
+        }
+        $count++
     }
 
     Return $Message
