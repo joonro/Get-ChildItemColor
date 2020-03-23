@@ -42,9 +42,9 @@ you need =-AllowClobber= option so =Get-ChildItemColor= may override the
 existing command =Out-Default=.
 ** Install from GitHub
 After cloning the repo, you can put files in =/src= folder into
-=Get-ChildItemColor= folder under your PowerShell Module folder
-(=$ENV:UserProfile\Documents\WindowsPowerShell\Modules=). The =master= branch
-always contains the latest release version.
+=Get-ChildItemColor= folder under your =PSModulePath= 
+(e.g., =$ENV:UserProfile\Documents\PowerShell\Modules= for PowerShell 6 and
+later). The =master= branch always contains the latest release version.
 * Usage
 When you import the module:
 
@@ -100,6 +100,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.0
+- Fix #27, Display issue with Chinese. (Thanks to [[https://github.com/shiena][shiena]])
 ** v2.1.1
 - BUGFIX: Print directory names correctly when =-Recurse= option is used
 ** v2.1.0
