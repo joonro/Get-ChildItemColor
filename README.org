@@ -45,6 +45,8 @@ After cloning the repo, you can put files in =/src= folder into
 =Get-ChildItemColor= folder under your =PSModulePath= 
 (e.g., =$ENV:UserProfile\Documents\PowerShell\Modules= for PowerShell 6 and
 later). The =master= branch always contains the latest release version.
+** Install from [[https://chocolatey.org][Chocolatey]]
+The module is available as a [[https://chocolatey.org/packages/get-childitemcolor][Chocolatey package]]. Install it using =choco install get-childitemcolor=.
 * Usage
 When you import the module:
 
