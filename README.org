@@ -102,6 +102,9 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.1
+- [[https://github.com/joonro/Get-ChildItemColor/pull/44][Fix uint32 error in cell width calculation]]. (Thanks to [[https://github.com/DanielCarmingham][DanielCarmingham]])
+- [[https://github.com/joonro/Get-ChildItemColor/pull/35][Add Chocolatey install instructions]]. (Thanks to [[https://github.com/pauby][pauby]])
 ** v2.2.0
 - Fix #27, Display issue with Chinese. (Thanks to [[https://github.com/shiena][shiena]])
 ** v2.1.1
