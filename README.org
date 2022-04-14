@@ -8,7 +8,7 @@ by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.co
 
 It provides two main functionalities:
 
-1. Directly provide coloring outputs of ~Get-ChildItem~ by modifying
+1. Directly provide coloring of ~Get-ChildItem~ output by modifying
    ~Out-Default~. Once the module is imported, ~Get-ChildItem~'s output will
    be automatically colored. It does support pipeline (e.g., ~Get-ChildItem |
    grep ".git"~). Also, now the directory name and the headers of its output
@@ -45,6 +45,8 @@ After cloning the repo, you can put files in =/src= folder into
 =Get-ChildItemColor= folder under your =PSModulePath= 
 (e.g., =$ENV:UserProfile\Documents\PowerShell\Modules= for PowerShell 6 and
 later). The =master= branch always contains the latest release version.
+** Install from [[https://chocolatey.org][Chocolatey]]
+The module is available as a [[https://chocolatey.org/packages/get-childitemcolor][Chocolatey package]]. Install it using =choco install get-childitemcolor=.
 * Usage
 When you import the module:
 
@@ -100,6 +102,9 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.1
+- [[https://github.com/joonro/Get-ChildItemColor/pull/44][Fix uint32 error in cell width calculation]]. (Thanks to [[https://github.com/DanielCarmingham][DanielCarmingham]])
+- [[https://github.com/joonro/Get-ChildItemColor/pull/35][Add Chocolatey install instructions]]. (Thanks to [[https://github.com/pauby][pauby]])
 ** v2.2.0
 - Fix #27, Display issue with Chinese. (Thanks to [[https://github.com/shiena][shiena]])
 ** v2.1.1
