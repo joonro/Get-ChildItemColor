@@ -8,7 +8,7 @@ by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.co
 
 It provides two main functionalities:
 
-1. Directly provide coloring outputs of ~Get-ChildItem~ by modifying
+1. Directly provide coloring of ~Get-ChildItem~ output by modifying
    ~Out-Default~. Once the module is imported, ~Get-ChildItem~'s output will
    be automatically colored. It does support pipeline (e.g., ~Get-ChildItem |
    grep ".git"~). Also, now the directory name and the headers of its output
