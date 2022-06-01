@@ -92,7 +92,7 @@ ForEach ($Exe in $GetChildItemColorExtensions['ExecutableList']) {
     $GetChildItemColorTable.File[$Exe] = "Green"
 }
 #+end_src
-** Creating a new category
+** Adding a new category
 One can create a new category and assign colors easily like the example below.
 #+begin_src powershell
 $GetChildItemColorExtensions['OfficeList'] = @(
@@ -116,6 +116,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.2
+- Add instructions about adding a new category.
 ** v2.2.1
 - [[https://github.com/joonro/Get-ChildItemColor/pull/44][Fix uint32 error in cell width calculation]]. (Thanks to [[https://github.com/DanielCarmingham][DanielCarmingham]])
 - [[https://github.com/joonro/Get-ChildItemColor/pull/35][Add Chocolatey install instructions]]. (Thanks to [[https://github.com/pauby][pauby]])
