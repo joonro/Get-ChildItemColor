@@ -88,8 +88,22 @@ See the example below.
 $GetChildItemColorTable.File['Directory'] = "Blue"
 
 # Change color for executables to Green
-ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
+ForEach ($Exe in $GetChildItemColorExtensions['ExecutableList']) {
     $GetChildItemColorTable.File[$Exe] = "Green"
+}
+#+end_src
+** Creating a new category
+One can create a new category and assign colors easily like the example below.
+#+begin_src powershell
+$GetChildItemColorExtensions['OfficeList'] = @(
+    ".docx",
+    ".pdf",
+    ".pptx",
+    ".xlsx"
+)
+
+ForEach ($Extension in $GetChildItemColorExtensions['OfficeList']) {
+    $GetChildItemColorTable.File.Add($Extension, "Green")
 }
 #+end_src
 ** Customizing vertical space
