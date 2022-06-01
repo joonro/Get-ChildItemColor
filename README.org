@@ -92,6 +92,20 @@ ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
     $GetChildItemColorTable.File[$Exe] = "Green"
 }
 #+end_src
+** Creating a new category
+One can create a new category and assign colors easily like the example below.
+#+begin_src powershell
+$GetChildItemColorExtensions['OfficeList'] = @(
+    ".docx",
+    ".pdf",
+    ".pptx",
+    ".xlsx"
+)
+
+ForEach ($Extension in $GetChildItemColorExtensions['OfficeList']) {
+    $GetChildItemColorTable.File.Add($Extension, "Green")
+}
+#+end_src
 ** Customizing vertical space
 You can adjust the vertical spacing using =$Global:GetChildItemColorVerticalSpace=. Default is 1 (PowerShell's 
 default is 2).
