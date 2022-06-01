@@ -88,7 +88,7 @@ See the example below.
 $GetChildItemColorTable.File['Directory'] = "Blue"
 
 # Change color for executables to Green
-ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
+ForEach ($Exe in $GetChildItemColorExtensions['ExecutableList']) {
     $GetChildItemColorTable.File[$Exe] = "Green"
 }
 #+end_src
