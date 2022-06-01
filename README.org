@@ -88,8 +88,22 @@ See the example below.
 $GetChildItemColorTable.File['Directory'] = "Blue"
 
 # Change color for executables to Green
-ForEach ($Exe in $GetChildItemColorExtensions.ExecutableList) {
+ForEach ($Exe in $GetChildItemColorExtensions['ExecutableList']) {
     $GetChildItemColorTable.File[$Exe] = "Green"
+}
+#+end_src
+** Adding a new category
+One can create a new category and assign colors easily like the example below.
+#+begin_src powershell
+$GetChildItemColorExtensions['OfficeList'] = @(
+    ".docx",
+    ".pdf",
+    ".pptx",
+    ".xlsx"
+)
+
+ForEach ($Extension in $GetChildItemColorExtensions['OfficeList']) {
+    $GetChildItemColorTable.File.Add($Extension, "Green")
 }
 #+end_src
 ** Customizing vertical space
@@ -102,6 +116,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.2.2
+- Add instructions about adding a new category.
 ** v2.2.1
 - [[https://github.com/joonro/Get-ChildItemColor/pull/44][Fix uint32 error in cell width calculation]]. (Thanks to [[https://github.com/DanielCarmingham][DanielCarmingham]])
 - [[https://github.com/joonro/Get-ChildItemColor/pull/35][Add Chocolatey install instructions]]. (Thanks to [[https://github.com/pauby][pauby]])
