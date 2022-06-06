@@ -6,13 +6,11 @@ function Write-Color-Process
 }
 
 function ProcessInfo {
-        param (
-        [Parameter(Mandatory=$True,Position=1)]
-        $process
+    param (
+        [Parameter(Mandatory=$True, Position=1)] $process
     )
 
-    if($script:showHeader)
-    {
+    If ($script:showHeader) {
         Write-Host        
         Write-Host 'Handles  NPM(K)    PM(K)      WS(K) VM(M)   CPU(s)     Id ProcessName'
         Write-Host '-------  ------    -----      ----- -----   ------     -- -----------'
