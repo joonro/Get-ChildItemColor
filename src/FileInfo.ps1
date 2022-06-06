@@ -34,7 +34,6 @@ function FileInfo {
 
     If ($Script:LastParentName -ne $ParentName) {
        $Color = $GetChildItemColorTable.File['Directory']
-       $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
 
        Write-Host
        Write-Host "    Directory: " -noNewLine
