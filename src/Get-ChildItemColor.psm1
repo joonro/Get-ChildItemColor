@@ -42,7 +42,8 @@ Function Get-ChildItemColor {
 Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
-        [switch]$Force
+        [switch]$Force,
+        [switch]$HideHeader
     )
 
     $nnl = $True
@@ -78,7 +79,12 @@ Function Get-ChildItemColorFormatWide {
             $LastParentName = $ParentName
         }
 
-        If ($LastParentName -ne $ParentName) {
+        If ($i -eq 0 -and $HideHeader) {
+                Write-Host ""
+        }
+
+        # write header
+        If ($LastParentName -ne $ParentName -and -not $HideHeader) {
             If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
