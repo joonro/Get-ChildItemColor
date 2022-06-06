@@ -1,6 +1,5 @@
 # Helper method to write file length in a more human readable format
-function Write-FileLength
-{
+function Write-FileLength {
     Param ($Length)
 
     If ($Length -eq $null) {
@@ -17,8 +16,7 @@ function Write-FileLength
 }
 
 # Outputs a line of a DirectoryInfo or FileInfo
-function Write-Color-LS
-{
+function Write-Color-LS {
     param ([string]$Color = "White", $Item)
 
     Write-host ("{0,-7} {1,25} {2,10} {3}" -f $Item.mode, ([String]::Format("{0,10}  {1,8}", $Item.LastWriteTime.ToString("d"), $Item.LastWriteTime.ToString("t"))), (Write-FileLength $Item.length), $Item.name) -ForegroundColor $Color
@@ -26,15 +24,14 @@ function Write-Color-LS
 
 function FileInfo {
     param (
-        [Parameter(Mandatory=$True,Position=1)]
+        [Parameter(Mandatory=$True, Position=1)]
         $Item
     )
 
     $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
 
-    If ($Script:LastParentName -ne $ParentName) {
+    If ($Script:LastParentName -ne $ParentName -or $Script:ShowHeader) {
        $Color = $GetChildItemColorTable.File['Directory']
-       $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
 
        Write-Host
        Write-Host "    Directory: " -noNewLine
@@ -46,6 +43,8 @@ function FileInfo {
 
        Write-Host "Mode                LastWriteTime     Length Name"
        Write-Host "----                -------------     ------ ----"
+
+       $Script:ShowHeader = $False
     }
 
     $Color = Get-FileColor $Item

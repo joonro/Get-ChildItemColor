@@ -8,17 +8,13 @@ $Global:GetChildItemColorVerticalSpace = 1
 Function Get-FileColor($Item) {
     $Key = 'Default'
 
-    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    If ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $Key = 'Symlink'
-    } Else {
-        If ($Item.GetType().Name -eq 'DirectoryInfo') {
-            $Key = 'Directory'
-        } Else {
-           If ($Item.PSobject.Properties.Name -contains "Extension") {
-               If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
-                    $Key = $Item.Extension
-                }
-            }
+    } ElseIf ($Item.GetType().Name -eq 'DirectoryInfo') {
+        $Key = 'Directory'
+    } ElseIf ($Item.PSobject.Properties.Name -contains "Extension") {
+        If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
+            $Key = $Item.Extension
         }
     }
 
@@ -140,28 +136,23 @@ Add-Type -assemblyname System.ServiceProcess
 . "$PSScriptRoot\MatchInfo.ps1"
 . "$PSScriptRoot\ProcessInfo.ps1"
 
-$script:showHeader=$true
+$Script:ShowHeader=$True
 
-function Out-Default {
+Function Out-Default {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
-        [switch]
-        ${Transcript},
+        [switch] ${Transcript},
+        [Parameter(Position=0, ValueFromPipeline=$True)]  [psobject]  ${InputObject}
+    )
 
-        [Parameter(Position=0, ValueFromPipeline=$true)]
-        [psobject]
-        ${InputObject})
-
-    begin
-    {
-        try {
+    Begin {
+        Try {
             For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
 
             $outBuffer = $null
-            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-            {
+            If ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
                 $PSBoundParameters['OutBuffer'] = 1
             }
             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Core\Out-Default', [System.Management.Automation.CommandTypes]::Cmdlet)
@@ -169,50 +160,46 @@ function Out-Default {
 
             $steppablePipeline = $scriptCmd.GetSteppablePipeline()
             $steppablePipeline.Begin($PSCmdlet)
-        } catch {
-            throw
+        } Catch {
+            Throw
         }
     }
 
-    process
-    {
-        try {
-            if(($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo]))
-            {
+    Process {
+        Try {
+            If (($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo])) {
                 FileInfo $_
-                $_ = $null
+                $_ = $Null
             }
 
-            elseif($_ -is [System.ServiceProcess.ServiceController])
-            {
+            ElseIf ($_ -is [System.ServiceProcess.ServiceController]) {
                 ServiceController $_
-                $_ = $null
+                $_ = $Null
             }
 
-            elseif($_ -is [Microsoft.Powershell.Commands.MatchInfo])
-            {
+            ElseIf ($_ -is [Microsoft.Powershell.Commands.MatchInfo]) {
                 MatchInfo $_
                 $_ = $null
             }
-            else {
+            Else {
                 $steppablePipeline.Process($_)
             }
-        } catch {
-            throw
+        } Catch {
+            Throw
         }
     }
 
-    end
+    End
     {
-        try {
+        Try {
             For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
 
-            $script:showHeader=$true
+            $Script:ShowHeader=$true
             $steppablePipeline.End()
-        } catch {
-            throw
+        } Catch {
+            Throw
         }
     }
     <#
