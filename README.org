@@ -68,14 +68,16 @@ If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not i
     Import-Module Get-ChildItemColor
     
     Set-Alias l Get-ChildItem -option AllScope
-    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
+    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader]
 }
 #+end_src
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
-of =Get-ChildItem | Format-Wide= equivalent.
-
-[fn:pathProfile] ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~
+of =Get-ChildItem | Format-Wide= equivalent. There is an optional
+~-HideHeader~ switch which will supress printing of headers (path on top) for
+~Get-ChildItemColorFormatWide~ when specified.
+ 
+[fn:pathProfile] ~$Home\[My ]Documents\PowerShell\Profile.ps1~ or ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~ 
 
 [fn:pathProfileISE] ~$Home\[My ]Documents\WindowsPowerShell\Microsoft.PowerShellISE_profile.ps1~
 
