@@ -116,6 +116,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v2.3.0
+- Better handling of header printout ([[https://github.com/joonro/Get-ChildItemColor/issues/41][#41]])
 ** v2.2.2
 - Add instructions about adding a new category.
 ** v2.2.1
