@@ -32,7 +32,7 @@ function FileInfo {
 
     $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
 
-    If ($Script:LastParentName -ne $ParentName) {
+    If ($Script:LastParentName -ne $ParentName -or $Script:ShowHeader) {
        $Color = $GetChildItemColorTable.File['Directory']
 
        Write-Host
@@ -45,6 +45,8 @@ function FileInfo {
 
        Write-Host "Mode                LastWriteTime     Length Name"
        Write-Host "----                -------------     ------ ----"
+
+       $Script:ShowHeader = $False
     }
 
     $Color = Get-FileColor $Item
