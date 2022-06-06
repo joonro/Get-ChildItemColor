@@ -42,14 +42,15 @@ Function Get-ChildItemColor {
 Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
-        [switch]$Force
+        [switch]$Force,
+        [switch]$HideHeader
     )
 
     $nnl = $True
 
     $Expression = "Get-ChildItem -Path `"$Path`" $Args"
 
-    if ($Force) {$Expression += " -Force"}
+    If ($Force) {$Expression += " -Force"}
 
     $Items = Invoke-Expression $Expression
 
@@ -67,8 +68,7 @@ Function Get-ChildItemColorFormatWide {
             If ($Item.PSParentPath -match "FileSystem") {
                 $ParentType = "Directory"
                 $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
-            }
-            ElseIf ($Item.PSParentPath -match "Registry") {
+            } ElseIf ($Item.PSParentPath -match "Registry") {
                 $ParentType = "Hive"
                 $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
             }
@@ -78,7 +78,12 @@ Function Get-ChildItemColorFormatWide {
             $LastParentName = $ParentName
         }
 
-        If ($LastParentName -ne $ParentName) {
+        If ($i -eq 0 -and $HideHeader) {
+                Write-Host ""
+        }
+
+        # write header
+        If ($LastParentName -ne $ParentName -and -not $HideHeader) {
             If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
@@ -95,7 +100,6 @@ Function Get-ChildItemColorFormatWide {
             For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
-
         }
 
         $nnl = ++$i % $cols -ne 0
@@ -189,8 +193,7 @@ Function Out-Default {
         }
     }
 
-    End
-    {
+    End {
         Try {
             For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
