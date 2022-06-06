@@ -142,7 +142,7 @@ Add-Type -assemblyname System.ServiceProcess
 
 $Script:ShowHeader=$True
 
-Function Out-Default {
+Function Out-DefaultColor {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
         [switch] ${Transcript},
@@ -213,4 +213,4 @@ Function Out-Default {
     #>
 }
 
-Export-ModuleMember -Function Out-Default, 'Get-*'
+Export-ModuleMember -Function Out-DefaultColor, 'Get-*'
