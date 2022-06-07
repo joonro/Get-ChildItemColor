@@ -22,28 +22,12 @@ Function Get-FileColor($Item) {
     Return $Color
 }
 
-Function Get-ChildItemColor {
-    Param(
-        [string]$Path = ""
-    )
-    $Expression = "Get-ChildItem -Path `"$Path`" $Args"
-
-    $Items = Invoke-Expression $Expression
-
-    ForEach ($Item in $Items) {
-        $Color = Get-FileColor $Item
-
-        $Host.UI.RawUI.ForegroundColor = $Color
-        $Item
-        $Host.UI.RawUI.ForegroundColor = $OriginalForegroundColor
-    }
-}
-
 Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
         [switch]$Force,
-        [switch]$HideHeader
+        [switch]$HideHeader,
+        [switch]$TrailingSlashDirectory
     )
 
     $nnl = $True
@@ -106,6 +90,11 @@ Function Get-ChildItemColorFormatWide {
 
         # truncate the item name
         $toWrite = $Item.Name
+
+        If ($TrailingSlashDirectory -and $Item.GetType().Name -eq 'DirectoryInfo') {
+            $toWrite += '\'
+        }
+
         $itemLength = LengthInBufferCells($toWrite)
         If ($itemLength -gt $pad) {
             $toWrite = (CutString $toWrite $pad)
@@ -142,7 +131,7 @@ Add-Type -assemblyname System.ServiceProcess
 
 $Script:ShowHeader=$True
 
-Function Out-Default {
+Function Out-ChildItemColor {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
         [switch] ${Transcript},
@@ -213,4 +202,24 @@ Function Out-Default {
     #>
 }
 
-Export-ModuleMember -Function Out-Default, 'Get-*'
+Function Get-ChildItemColor {
+    [CmdletBinding()]
+    Param(
+        [string]$Path = ""
+    )
+
+    Begin {
+        $Expression = "Get-ChildItem -Path `"$Path`" $Args"
+        $Items = Invoke-Expression $Expression
+    }
+
+    Process {
+        If ($PSCmdlet.MyInvocation.Line -Match '\|') {  # pipeline is used
+            $Items
+        } Else {
+            $Items | Out-ChildItemColor
+        }
+    }
+}
+
+Export-ModuleMember -Function Out-ChildItemColor, 'Get-*'
