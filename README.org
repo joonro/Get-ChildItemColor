@@ -19,13 +19,11 @@ It provides two main functionalities:
 Note that as of v3.0.0, it no longer overloads ~Out-Default~, and thus ~Get-ChildItem~'s
 output will not be touched. Users should use ~Get-ChildItemColor~ instead.
 
-* Screenshot:
-** Get-ChildItem (Colorized)
-[[file:./screenshots/Get-ChildItem.png]] 
-** Get-ChildItemColorFormatWide (=ls= equivalent)
-[[file:./screenshots/Get-ChildItemColorFormatWide.png]] 
+* Screenshots
 ** Get-ChildItemColor
 [[file:./screenshots/Get-ChildItemColor.png]] 
+** Get-ChildItemColorFormatWide (=ls= equivalent)
+[[file:./screenshots/Get-ChildItemColorFormatWide.png]] 
 * Install
 ** Install from [[https://www.powershellgallery.com/packages/Get-ChildItemColor/][PowerShellGallery]]
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
