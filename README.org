@@ -16,6 +16,9 @@ It provides two main functionalities:
    not allow multiple colors in one line. As a result, pipeline does not work
    with =Get-ChildItemColorFormatWide=.
 
+Note that as of v3.0.0, it no longer overloads ~Out-Default~, and thus ~Get-ChildItem~'s
+output will not be touched. Users should use ~Get-ChildItemColor~ instead.
+
 * Screenshot:
 ** Get-ChildItem (Colorized)
 [[file:./screenshots/Get-ChildItem.png]] 
@@ -110,6 +113,10 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v3.0.0
+- ~Get-ChildItemColor~ is pipeline-aware and only adds color when it is not
+  being used as a part of a pipeline. It no longer overloads ~Out-Default~. ([[https://github.com/joonro/Get-ChildItemColor/issues/31][#31]])
+- Add ~TrailingSlashDirectory~ switch to ~Get-ChildItemColorFormatWide~ ([[https://github.com/joonro/Get-ChildItemColor/issues/37][#37]])
 ** v2.4.0
 - Add ~HideHeader~ switch to ~Get-ChildItemColorFormatWide~ ([[https://github.com/joonro/Get-ChildItemColor/issues/29][#29]])
 ** v2.3.0
