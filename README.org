@@ -57,14 +57,17 @@ If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not i
     Import-Module Get-ChildItemColor
     
     Set-Alias l Get-ChildItemColor -option AllScope
-    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader]
+    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader] [-TrailingSlashDirectory]
 }
 #+end_src
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
-of =Get-ChildItem | Format-Wide= equivalent. There is an optional
-~-HideHeader~ switch which will supress printing of headers (path on top) for
-~Get-ChildItemColorFormatWide~ when specified.
+of =Get-ChildItem | Format-Wide= equivalent.
+
+~Get-ChildItemColorFormatWide~ has the following optional switches:
+
+- -HideHeader :: supress printing of headers (path on top).
+- -TrailingSlashDirectory :: add a trailing slash to directory names.
  
 [fn:pathProfile] ~$Home\[My ]Documents\PowerShell\Profile.ps1~ or ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~ 
 
