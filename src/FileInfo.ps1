@@ -19,7 +19,10 @@ function Write-FileLength {
 function Write-Color-LS {
     param ([string]$Color = "White", $Item)
 
-    Write-host ("{0,-7} {1,25} {2,10} {3}" -f $Item.mode, ([String]::Format("{0,10}  {1,8}", $Item.LastWriteTime.ToString("d"), $Item.LastWriteTime.ToString("t"))), (Write-FileLength $Item.length), $Item.name) -ForegroundColor $Color
+    Write-host ("{0,-7} " -f $Item.mode) -NoNewline
+    Write-host ("{0,25} " -f ([String]::Format("{0,10}  {1,8}", $Item.LastWriteTime.ToString("d"), $Item.LastWriteTime.ToString("t")))) -NoNewline
+    Write-host ("{0,10} " -f (Write-FileLength $Item.length)) -NoNewline
+    Write-host ("{0}" -f $Item.name) -ForegroundColor $Color
 }
 
 function FileInfo {
