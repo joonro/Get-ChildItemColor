@@ -22,23 +22,6 @@ Function Get-FileColor($Item) {
     Return $Color
 }
 
-Function Get-ChildItemColor {
-    Param(
-        [string]$Path = ""
-    )
-    $Expression = "Get-ChildItem -Path `"$Path`" $Args"
-
-    $Items = Invoke-Expression $Expression
-
-    ForEach ($Item in $Items) {
-        $Color = Get-FileColor $Item
-
-        $Host.UI.RawUI.ForegroundColor = $Color
-        $Item
-        $Host.UI.RawUI.ForegroundColor = $OriginalForegroundColor
-    }
-}
-
 Function Get-ChildItemColorFormatWide {
     Param(
         [string]$Path = "",
@@ -142,7 +125,7 @@ Add-Type -assemblyname System.ServiceProcess
 
 $Script:ShowHeader=$True
 
-Function Out-DefaultColor {
+Function Out-ChildItemColor {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
         [switch] ${Transcript},
@@ -213,4 +196,24 @@ Function Out-DefaultColor {
     #>
 }
 
-Export-ModuleMember -Function Out-DefaultColor, 'Get-*'
+Function Get-ChildItemColor {
+    [CmdletBinding()]
+    Param(
+        [string]$Path = ""
+    )
+
+    Begin {
+        $Expression = "Get-ChildItem -Path `"$Path`" $Args"
+        $Items = Invoke-Expression $Expression
+    }
+
+    Process {
+        If ($PSCmdlet.MyInvocation.Line -Match '\|') {  # pipeline is used
+            $Items
+        } Else {
+            $Items | Out-ChildItemColor
+        }
+    }
+}
+
+Export-ModuleMember -Function Out-ChildItemColor, 'Get-*'

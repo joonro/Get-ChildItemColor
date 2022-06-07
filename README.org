@@ -8,22 +8,13 @@ by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.co
 
 It provides two main functionalities:
 
-1. Directly provide coloring of ~Get-ChildItem~ output by modifying
-   ~Out-Default~. Once the module is imported, ~Get-ChildItem~'s output will
-   be automatically colored. It does support pipeline (e.g., ~Get-ChildItem |
-   grep ".git"~). Also, now the directory name and the headers of its output
-   have consistent colors. This is an adaptation of [[https://github.com/Davlind/PSColor][PSColor]].
+1. Provide ~Get-ChildItemColor~, which adds coloring to the output of
+   ~Get-ChildItem~, this function supports pipelines (it is pipeline-aware, so
+   it does not touch the output when it is being used in a pipeline).
 2. It provides =Get-ChildItemColorFormatWide=, which uses =Write-Host= to
    output coloring. This is because =Get-ChildItemColor | Format-Wide= does
-   not allow multiple colors in one line. As a result, pipeline does not work with
-   =Get-ChildItemColorFormatWide=.
-
-It also provides ~Get-ChildItemColor~, which just changes
-=$Host.UI.RawUI.ForegroundColor= and keep the item object intact. This was the
-implementation before v2.0.0, and it does support pipeline. (e.g.,
-~Get-ChildItemColor | grep ".git"~). The main shortcoming of this approach is
-that the directory name and the headers of its output have inconsistent
-colors.
+   not allow multiple colors in one line. As a result, pipeline does not work
+   with =Get-ChildItemColorFormatWide=.
 
 * Screenshot:
 ** Get-ChildItem (Colorized)
@@ -54,10 +45,8 @@ When you import the module:
 Import-Module Get-ChildItemColor
 #+end_src
 
-it provides a proxy function for =Output-Default=, so =Get-ChildItem='s output
-will be automatically colored. In addition, it provides two functions,
-=Get-ChildItemColorFormatWide= and =Get-ChildItemColor= (the latter is
-unlikely to be useful, but remained intact just in case).
+it provides two functions, =Get-ChildItemColorFormatWide= and
+=Get-ChildItemColor=.
 
 You can add aliases to these functions for convenience. For example, I have
 the following in my profile[fn:pathProfile] (please do not put this into ISE
@@ -67,7 +56,7 @@ profile[fn:pathProfileISE] as it does not work in ISE):
 If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not in the ISE
     Import-Module Get-ChildItemColor
     
-    Set-Alias l Get-ChildItem -option AllScope
+    Set-Alias l Get-ChildItemColor -option AllScope
     Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader]
 }
 #+end_src
