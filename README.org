@@ -111,6 +111,9 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v3.2.0
+- Make ~Get-ChildItemColor~ a proxy function of ~~Get-ChildItem~, so
+  ~Get-ChildItemColor~ supports all the parameters of the original function.
 ** v3.1.0
 - ~Get-ChildItemColor~ only highlights names instead of highlighting the whole row. ([[https://github.com/joonro/Get-ChildItemColor/issues/30][#30]])
 ** v3.0.0
