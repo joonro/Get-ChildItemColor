@@ -69,7 +69,7 @@ Description = 'Get-ChildItemColor provides colored versions of Get-ChildItem Cmd
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
     'Get-ChildItemColor',
-    'Get-ChildItemColorFormatWide'
+    'Get-ChildItemColorFormatWide',
     'Out-ChildItemColor'
 )
 
