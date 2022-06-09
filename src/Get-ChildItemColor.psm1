@@ -276,6 +276,13 @@ begin
         $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Management\Get-ChildItem', [System.Management.Automation.CommandTypes]::Cmdlet)
         $scriptCmd = {& $wrappedCmd @PSBoundParameters }
 
+        $ifPipeline = $PSCmdlet.MyInvocation.Line -Match '\|'
+
+        if ($ifPipeline) {
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
+        }
+
     } catch {
         throw
     }
@@ -286,8 +293,8 @@ process
     try {
         $items = $scriptCmd.invoke()
 
-        If ($PSCmdlet.MyInvocation.Line -Match '\|') {  # pipeline is used
-            $items
+        if ($ifPipeline) {
+            $steppablePipeline.Process($_)
         } Else {
             $items | Out-ChildItemColor
         }
@@ -299,6 +306,9 @@ process
 end
 {
     try {
+        if ($ifPipeline) {
+            $steppablePipeline.End()
+        }
     } catch {
         throw
     }
