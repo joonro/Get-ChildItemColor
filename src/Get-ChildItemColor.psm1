@@ -228,7 +228,7 @@ param(
     [switch]
     ${Recurse},
 
-    [uint]
+    [uint32]
     ${Depth},
 
     [switch]
