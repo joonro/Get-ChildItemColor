@@ -5,25 +5,25 @@ $Global:GetChildItemColorVerticalSpace = 1
 
 . "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
-Function Get-FileColor($Item) {
+function Get-FileColor($Item) {
     $Key = 'Default'
 
-    If ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $Key = 'Symlink'
-    } ElseIf ($Item.GetType().Name -eq 'DirectoryInfo') {
+    } elseif ($Item.GetType().Name -eq 'DirectoryInfo') {
         $Key = 'Directory'
-    } ElseIf ($Item.PSobject.Properties.Name -contains "Extension") {
+    } elseif ($Item.PSobject.Properties.Name -contains "Extension") {
         If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
             $Key = $Item.Extension
         }
     }
 
     $Color = $GetChildItemColorTable.File[$Key]
-    Return $Color
+    return $Color
 }
 
-Function Get-ChildItemColorFormatWide {
-    Param(
+function Get-ChildItemColorFormatWide {
+    param(
         [string]$Path = "",
         [switch]$Force,
         [switch]$HideHeader,
@@ -34,45 +34,45 @@ Function Get-ChildItemColorFormatWide {
 
     $Expression = "Get-ChildItem -Path `"$Path`" $Args"
 
-    If ($Force) {$Expression += " -Force"}
+    if ($Force) {$Expression += " -Force"}
 
     $Items = Invoke-Expression $Expression
 
     $lnStr = $Items | Select-Object Name | Sort-Object { LengthInBufferCells("$_") } -Descending | Select-Object -First 1
     $len = LengthInBufferCells($lnStr.Name)
     $width = $Host.UI.RawUI.WindowSize.Width
-    $cols = If ($len) {[math]::Floor(($width + 1) / ($len + 2))} Else {1}
+    $cols = if ($len) {[math]::Floor(($width + 1) / ($len + 2))} else {1}
     if (!$cols) {$cols = 1}
 
     $i = 0
     $pad = [math]::Ceiling(($width + 2) / $cols) - 3
 
-    ForEach ($Item in $Items) {
-        If ($Item.PSobject.Properties.Name -contains "PSParentPath") {
-            If ($Item.PSParentPath -match "FileSystem") {
+    foreach ($Item in $Items) {
+        if ($Item.PSobject.Properties.Name -contains "PSParentPath") {
+            if ($Item.PSParentPath -match "FileSystem") {
                 $ParentType = "Directory"
                 $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
-            } ElseIf ($Item.PSParentPath -match "Registry") {
+            } elseif ($Item.PSParentPath -match "Registry") {
                 $ParentType = "Hive"
                 $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
             }
-        } Else {
+        } else {
             $ParentType = ""
             $ParentName = ""
             $LastParentName = $ParentName
         }
 
-        If ($i -eq 0 -and $HideHeader) {
+        if ($i -eq 0 -and $HideHeader) {
                 Write-Host ""
         }
 
         # write header
-        If ($LastParentName -ne $ParentName -and -not $HideHeader) {
-            If ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+        if ($LastParentName -ne $ParentName -and -not $HideHeader) {
+            if ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
                 Write-Host ""
             }
 
-            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+            for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
 
@@ -81,7 +81,7 @@ Function Get-ChildItemColorFormatWide {
             $Color = $GetChildItemColorTable.File['Directory']
             Write-Host -Fore $Color " $ParentName"
 
-            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+            for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
         }
@@ -91,32 +91,32 @@ Function Get-ChildItemColorFormatWide {
         # truncate the item name
         $toWrite = $Item.Name
 
-        If ($TrailingSlashDirectory -and $Item.GetType().Name -eq 'DirectoryInfo') {
+        if ($TrailingSlashDirectory -and $Item.GetType().Name -eq 'DirectoryInfo') {
             $toWrite += '\'
         }
 
         $itemLength = LengthInBufferCells($toWrite)
-        If ($itemLength -gt $pad) {
+        if ($itemLength -gt $pad) {
             $toWrite = (CutString $toWrite $pad)
             $itemLength = LengthInBufferCells($toWrite)
         }
 
-        $Color = Get-FileColor $Item
+        $color = Get-FileColor $Item
         $widePad = $pad - ($itemLength - $toWrite.Length)
-        Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $Color -NoNewLine:$nnl
+        Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
 
-        If ($nnl) {
+        if ($nnl) {
             Write-Host "  " -NoNewLine
         }
 
         $LastParentName = $ParentName
     }
 
-    For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+    for ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
         Write-Host ""
     }
 
-    If ($nnl) {  # conditionally add an empty line
+    if ($nnl) {  # conditionally add an empty line
         Write-Host ""
     }
 }
@@ -129,23 +129,23 @@ Add-Type -assemblyname System.ServiceProcess
 . "$PSScriptRoot\MatchInfo.ps1"
 . "$PSScriptRoot\ProcessInfo.ps1"
 
-$Script:ShowHeader=$True
+$script:ShowHeader=$True
 
-Function Out-ChildItemColor {
+function Out-ChildItemColor {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
         [switch] ${Transcript},
         [Parameter(Position=0, ValueFromPipeline=$True)]  [psobject]  ${InputObject}
     )
 
-    Begin {
-        Try {
-            For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+    begin {
+        try {
+            for ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
 
             $outBuffer = $null
-            If ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
                 $PSBoundParameters['OutBuffer'] = 1
             }
             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Core\Out-Default', [System.Management.Automation.CommandTypes]::Cmdlet)
@@ -153,45 +153,45 @@ Function Out-ChildItemColor {
 
             $steppablePipeline = $scriptCmd.GetSteppablePipeline()
             $steppablePipeline.Begin($PSCmdlet)
-        } Catch {
-            Throw
+        } catch {
+            throw
         }
     }
 
-    Process {
-        Try {
-            If (($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo])) {
+    process {
+        try {
+            if (($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo])) {
                 FileInfo $_
                 $_ = $Null
             }
 
-            ElseIf ($_ -is [System.ServiceProcess.ServiceController]) {
+            elseif ($_ -is [System.ServiceProcess.ServiceController]) {
                 ServiceController $_
                 $_ = $Null
             }
 
-            ElseIf ($_ -is [Microsoft.Powershell.Commands.MatchInfo]) {
+            elseif ($_ -is [Microsoft.Powershell.Commands.MatchInfo]) {
                 MatchInfo $_
                 $_ = $null
             }
-            Else {
+            else {
                 $steppablePipeline.Process($_)
             }
-        } Catch {
-            Throw
+        } catch {
+            throw
         }
     }
 
-    End {
-        Try {
-            For ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+    end {
+        try {
+            for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
 
-            $Script:ShowHeader=$true
+            $script:ShowHeader=$true
             $steppablePipeline.End()
-        } Catch {
-            Throw
+        } catch {
+            throw
         }
     }
     <#
@@ -202,7 +202,7 @@ Function Out-ChildItemColor {
     #>
 }
 
-Function Get-ChildItemColor {
+function Get-ChildItemColor {
 [CmdletBinding(DefaultParameterSetName='Items', HelpUri='https://go.microsoft.com/fwlink/?LinkID=2096492')]
 param(
     [Parameter(ParameterSetName='Items', Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
@@ -276,6 +276,13 @@ begin
         $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Management\Get-ChildItem', [System.Management.Automation.CommandTypes]::Cmdlet)
         $scriptCmd = {& $wrappedCmd @PSBoundParameters }
 
+        $ifPipeline = $PSCmdlet.MyInvocation.Line -Match '\|'
+
+        if ($ifPipeline) {
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
+        }
+
     } catch {
         throw
     }
@@ -286,9 +293,9 @@ process
     try {
         $items = $scriptCmd.invoke()
 
-        If ($PSCmdlet.MyInvocation.Line -Match '\|') {  # pipeline is used
-            $items
-        } Else {
+        if ($ifPipeline) {
+            $steppablePipeline.Process($_)
+        } else {
             $items | Out-ChildItemColor
         }
     } catch {
@@ -299,6 +306,9 @@ process
 end
 {
     try {
+        if ($ifPipeline) {
+            $steppablePipeline.End()
+        }
     } catch {
         throw
     }
