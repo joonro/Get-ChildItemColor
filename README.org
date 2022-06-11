@@ -110,6 +110,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v3.2.1
+- Refactoring.
 ** v3.2.0
 - Make ~Get-ChildItemColor~ a proxy function of ~Get-ChildItem~, so
   ~Get-ChildItemColor~ supports all the parameters of the original function.
