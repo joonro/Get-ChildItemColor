@@ -54,10 +54,10 @@ function LengthInBufferCell
     # ($Char -ge 0x30000 -and $Char -le 0x3fffd)
     if ($isWide)
     {
-        Return 2
+        return 2
     }
     else
     {
-        Return 1
+        return 1
     }
 }
