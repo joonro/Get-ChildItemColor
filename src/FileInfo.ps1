@@ -17,28 +17,28 @@ function Write-FileLength {
 
 # Outputs a line of a DirectoryInfo or FileInfo
 function Write-Color-LS {
-    param ([string]$Color = "White", $Item)
+    param ([string]$color = "White", $item)
 
-    Write-host ("{0,-7} " -f $Item.mode) -NoNewline
-    Write-host ("{0,25} " -f ([String]::Format("{0,10}  {1,8}", $Item.LastWriteTime.ToString("d"), $Item.LastWriteTime.ToString("t")))) -NoNewline
-    Write-host ("{0,10} " -f (Write-FileLength $Item.length)) -NoNewline
-    Write-host ("{0}" -f $Item.name) -ForegroundColor $Color
+    Write-host ("{0,-7} " -f $item.mode) -NoNewline
+    Write-host ("{0,25} " -f ([String]::Format("{0,10}  {1,8}", $item.LastWriteTime.ToString("d"), $item.LastWriteTime.ToString("t")))) -NoNewline
+    Write-host ("{0,10} " -f (Write-FileLength $item.length)) -NoNewline
+    Write-host ("{0}" -f $item.name) -ForegroundColor $color
 }
 
 function FileInfo {
     param (
         [Parameter(Mandatory=$True, Position=1)]
-        $Item
+        $item
     )
 
-    $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
+    $parentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
 
-    If ($Script:LastParentName -ne $ParentName -or $Script:ShowHeader) {
-       $Color = $GetChildItemColorTable.File['Directory']
+    if ($script:LastParentName -ne $ParentName -or $script:ShowHeader) {
+       $color = $GetChildItemColorTable.File['Directory']
 
        Write-Host
        Write-Host "    Directory: " -noNewLine
-       Write-Host " $($ParentName)`n" -ForegroundColor $Color
+       Write-Host " $($parentName)`n" -ForegroundColor $color
 
        For ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
            Write-Host ""
@@ -47,12 +47,12 @@ function FileInfo {
        Write-Host "Mode                LastWriteTime     Length Name"
        Write-Host "----                -------------     ------ ----"
 
-       $Script:ShowHeader = $False
+       $script:ShowHeader = $False
     }
 
-    $Color = Get-FileColor $Item
+    $color = Get-FileColor $item
 
-    Write-Color-LS $Color $Item
+    Write-Color-LS $color $item
 
-    $Script:LastParentName = $ParentName
+    $Script:LastParentName = $parentName
 }

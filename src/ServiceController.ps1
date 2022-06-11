@@ -1,9 +1,9 @@
 # Outputs a line of a ServiceController
 function Write-Color-Service
 {
-    param ([string]$Color = "White", $service)
+    param ([string]$color = "White", $service)
 
-    Write-host ("{0,-8}" -f $_.Status) -ForegroundColor $Color -noNewLine
+    Write-host ("{0,-8}" -f $_.Status) -ForegroundColor $color -noNewLine
     Write-host (" {0,-18} {1,-39}" -f (CutString $_.Name 18), (CutString $_.DisplayName 38)) -ForegroundColor "white"
 }
 
@@ -22,13 +22,13 @@ function ServiceController {
 
     if ($Service.Status -eq 'Stopped')
     {
-        Write-Color-Service $Global:GetChildItemColorTable.Service["Stopped"] $Service
+        Write-Color-Service $global:GetChildItemColorTable.Service["Stopped"] $Service
     }
     elseif ($Service.Status -eq 'Running')
     {
-        Write-Color-Service $Global:GetChildItemColorTable.Service["Running"] $Service
+        Write-Color-Service $global:GetChildItemColorTable.Service["Running"] $Service
     }
     else {
-        Write-Color-Service $Global:GetChildItemColorTable.Service["Default"] $Service
+        Write-Color-Service $global:GetChildItemColorTable.Service["Default"] $Service
     }
 }

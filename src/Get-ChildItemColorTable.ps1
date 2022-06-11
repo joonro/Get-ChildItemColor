@@ -1,4 +1,4 @@
-$Global:GetChildItemColorExtensions = @{}
+$global:GetChildItemColorExtensions = @{}
 
 $GetChildItemColorExtensions.Add(
     'CompressedList',
@@ -162,7 +162,7 @@ $GetChildItemColorExtensions.Add(
     )
 )
 
-$Global:GetChildItemColorTable = @{
+$global:GetChildItemColorTable = @{
     File = @{ Default = $OriginalForegroundColor }
     Service = @{ Default = $OriginalForegroundColor }
     Match = @{ Default = $OriginalForegroundColor }
@@ -171,27 +171,27 @@ $Global:GetChildItemColorTable = @{
 $GetChildItemColorTable.File.Add('Directory', "Blue")
 $GetChildItemColorTable.File.Add('Symlink', "Cyan") 
 
-ForEach ($Extension in $GetChildItemColorExtensions['CompressedList']) {
+foreach ($Extension in $GetChildItemColorExtensions['CompressedList']) {
     $GetChildItemColorTable.File.Add($Extension, "Red")
 }
 
-ForEach ($Extension in $GetChildItemColorExtensions['ExecutableList']) {
+foreach ($Extension in $GetChildItemColorExtensions['ExecutableList']) {
     $GetChildItemColorTable.File.Add($Extension, "Green")
 }
 
-ForEach ($Extension in $GetChildItemColorExtensions['TextList']) {
+foreach ($Extension in $GetChildItemColorExtensions['TextList']) {
     $GetChildItemColorTable.File.Add($Extension, "Yellow")
 }
 
-ForEach ($Extension in $GetChildItemColorExtensions['DllPdbList']) {
+foreach ($Extension in $GetChildItemColorExtensions['DllPdbList']) {
     $GetChildItemColorTable.File.Add($Extension, "DarkGreen")
 }
 
-ForEach ($Extension in $GetChildItemColorExtensions['ConfigsList']) {
+foreach ($Extension in $GetChildItemColorExtensions['ConfigsList']) {
     $GetChildItemColorTable.File.Add($Extension, "Gray")
 }
 
-ForEach ($Extension in $GetChildItemColorExtensions['SourceCodeList']) {
+foreach ($Extension in $GetChildItemColorExtensions['SourceCodeList']) {
     $GetChildItemColorTable.File.Add($Extension, "DarkYellow")
 }
 
