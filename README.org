@@ -110,6 +110,8 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
+** v3.2.2
+- Replace ~uint~ with ~uint32~ to maintain compatibility with PowerShell 5 ([[https://github.com/joonro/Get-ChildItemColor/issues/47][#47]])
 ** v3.2.1
 - Refactoring.
 ** v3.2.0
