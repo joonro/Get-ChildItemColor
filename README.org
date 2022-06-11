@@ -8,13 +8,14 @@ by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.co
 
 It provides two main functionalities:
 
-1. Provide ~Get-ChildItemColor~, which adds coloring to the output of
+1. ~Get-ChildItemColor~, which adds coloring to the output of
    ~Get-ChildItem~, this function supports pipelines (it is pipeline-aware, so
    it does not touch the output when it is being used in a pipeline).
-2. It provides =Get-ChildItemColorFormatWide=, which uses =Write-Host= to
-   output coloring. This is because =Get-ChildItemColor | Format-Wide= does
-   not allow multiple colors in one line. As a result, pipeline does not work
-   with =Get-ChildItemColorFormatWide=.
+2. =Get-ChildItemColorFormatWide=, which is colored version of
+   =Get-ChildItemColor | Format-Wide=.  This uses =Write-Host= to output
+   coloring. This is because =Get-ChildItemColor | Format-Wide= does not allow
+   multiple colors in one line. As a result, pipeline does not work with
+   =Get-ChildItemColorFormatWide=.
 
 Note that as of v3.0.0, it no longer overloads ~Out-Default~, and thus ~Get-ChildItem~'s
 output will not be touched. Users should use ~Get-ChildItemColor~ instead.
@@ -29,9 +30,7 @@ output will not be touched. Users should use ~Get-ChildItemColor~ instead.
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
 are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.com/en-us/download/details.aspx?id=49186][PowerShellGet]].
 
-Then, you can run =Install-Module -AllowClobber Get-ChildItemColor=. Note that
-you need =-AllowClobber= option so =Get-ChildItemColor= may override the
-existing command =Out-Default=.
+Then, you can run =Install-Module Get-ChildItemColor=.
 ** Install from GitHub
 After cloning the repo, you can put files in =/src= folder into
 =Get-ChildItemColor= folder under your =PSModulePath= 
