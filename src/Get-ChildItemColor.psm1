@@ -8,9 +8,14 @@ $Global:GetChildItemColorVerticalSpace = 1
 function Get-FileColor($item) {
     $key = 'Default'
 
-    $inOneDrive = ($item.PSParentPath.Contains($env:OneDrive) `
-        -or $item.PSParentPath.Contains($env:OneDriveConsumerOneDrive) `
-        -or $item.PSParentPath.Contains($env:OneDriveCommercial))
+    # check if in OneDrive
+    if ($item.PSobject.Properties.Name -contains "PSParentPath") {
+        $inOneDrive = ($item.PSParentPath.Contains($env:OneDrive) `
+            -or $item.PSParentPath.Contains($env:OneDriveConsumerOneDrive) `
+            -or $item.PSParentPath.Contains($env:OneDriveCommercial))
+    } else {
+        $inOneDrive = $false
+    }
 
     if ([bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and (-not $inOneDrive)) {
         $key = 'Symlink'
