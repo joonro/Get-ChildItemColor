@@ -10,7 +10,7 @@
 RootModule = 'Get-ChildItemColor.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.2.2'
+ModuleVersion = '3.3.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
