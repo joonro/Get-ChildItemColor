@@ -5,24 +5,24 @@ $Global:GetChildItemColorVerticalSpace = 1
 
 . "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
-function Get-FileColor($Item) {
-    $Key = 'Default'
+function Get-FileColor($item) {
+    $key = 'Default'
 
-        $Key = 'Symlink'
-    } elseif ($Item.GetType().Name -eq 'DirectoryInfo') {
-        $Key = 'Directory'
-    } elseif ($Item.PSobject.Properties.Name -contains "Extension") {
-        If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
-            $Key = $Item.Extension
     $inOneDrive = ($item.PSParentPath.Contains($env:OneDrive) `
         -or $item.PSParentPath.Contains($env:OneDriveConsumerOneDrive) `
         -or $item.PSParentPath.Contains($env:OneDriveCommercial))
 
     if ([bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and (-not $inOneDrive)) {
+        $key = 'Symlink'
+    } elseif ($item.GetType().Name -eq 'DirectoryInfo') {
+        $key = 'Directory'
+    } elseif ($item.PSobject.Properties.Name -contains "Extension") {
+        If ($GetChildItemColorTable.File.ContainsKey($item.Extension)) {
+            $key = $item.Extension
         }
     }
 
-    $Color = $GetChildItemColorTable.File[$Key]
+    $Color = $GetChildItemColorTable.File[$key]
     return $Color
 }
 
@@ -40,9 +40,9 @@ function Get-ChildItemColorFormatWide {
 
     if ($Force) {$Expression += " -Force"}
 
-    $Items = Invoke-Expression $Expression
+    $items = Invoke-Expression $Expression
 
-    $lnStr = $Items | Select-Object Name | Sort-Object { LengthInBufferCells("$_") } -Descending | Select-Object -First 1
+    $lnStr = $items | Select-Object Name | Sort-Object { LengthInBufferCells("$_") } -Descending | Select-Object -First 1
     $len = LengthInBufferCells($lnStr.Name)
     $width = $Host.UI.RawUI.WindowSize.Width
     $cols = if ($len) {[math]::Floor(($width + 1) / ($len + 2))} else {1}
@@ -51,14 +51,14 @@ function Get-ChildItemColorFormatWide {
     $i = 0
     $pad = [math]::Ceiling(($width + 2) / $cols) - 3
 
-    foreach ($Item in $Items) {
-        if ($Item.PSobject.Properties.Name -contains "PSParentPath") {
-            if ($Item.PSParentPath -match "FileSystem") {
+    foreach ($item in $items) {
+        if ($item.PSobject.Properties.Name -contains "PSParentPath") {
+            if ($item.PSParentPath -match "FileSystem") {
                 $ParentType = "Directory"
-                $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
-            } elseif ($Item.PSParentPath -match "Registry") {
+                $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
+            } elseif ($item.PSParentPath -match "Registry") {
                 $ParentType = "Hive"
-                $ParentName = $Item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
+                $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
             }
         } else {
             $ParentType = ""
@@ -93,9 +93,9 @@ function Get-ChildItemColorFormatWide {
         $nnl = ++$i % $cols -ne 0
 
         # truncate the item name
-        $toWrite = $Item.Name
+        $toWrite = $item.Name
 
-        if ($TrailingSlashDirectory -and $Item.GetType().Name -eq 'DirectoryInfo') {
+        if ($TrailingSlashDirectory -and $item.GetType().Name -eq 'DirectoryInfo') {
             $toWrite += '\'
         }
 
@@ -105,7 +105,7 @@ function Get-ChildItemColorFormatWide {
             $itemLength = LengthInBufferCells($toWrite)
         }
 
-        $color = Get-FileColor $Item
+        $color = Get-FileColor $item
         $widePad = $pad - ($itemLength - $toWrite.Length)
         Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
 
