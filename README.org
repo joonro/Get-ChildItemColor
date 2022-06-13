@@ -110,19 +110,7 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
-** v3.2.2
-- Replace ~uint~ with ~uint32~ to maintain compatibility with PowerShell 5 ([[https://github.com/joonro/Get-ChildItemColor/issues/47][#47]])
-** v3.2.1
-- Refactoring.
-** v3.2.0
-- Make ~Get-ChildItemColor~ a proxy function of ~Get-ChildItem~, so
-  ~Get-ChildItemColor~ supports all the parameters of the original function.
-** v3.1.0
-- ~Get-ChildItemColor~ only highlights names instead of highlighting the whole row. ([[https://github.com/joonro/Get-ChildItemColor/issues/30][#30]])
-** v3.0.0
-- ~Get-ChildItemColor~ is pipeline-aware and only adds color when it is not
-  being used as a part of a pipeline. It no longer overloads ~Out-Default~. ([[https://github.com/joonro/Get-ChildItemColor/issues/31][#31]])
-- Add ~TrailingSlashDirectory~ switch to ~Get-ChildItemColorFormatWide~ ([[https://github.com/joonro/Get-ChildItemColor/issues/37][#37]])
+- See [[https://github.com/joonro/Get-ChildItemColor/releases][Releases]] for newer changelog.
 ** v2.4.0
 - Add ~HideHeader~ switch to ~Get-ChildItemColorFormatWide~ ([[https://github.com/joonro/Get-ChildItemColor/issues/29][#29]])
 ** v2.3.0
