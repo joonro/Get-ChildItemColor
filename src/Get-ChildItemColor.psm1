@@ -8,13 +8,17 @@ $Global:GetChildItemColorVerticalSpace = 1
 function Get-FileColor($Item) {
     $Key = 'Default'
 
-    if ([bool]($Item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $Key = 'Symlink'
     } elseif ($Item.GetType().Name -eq 'DirectoryInfo') {
         $Key = 'Directory'
     } elseif ($Item.PSobject.Properties.Name -contains "Extension") {
         If ($GetChildItemColorTable.File.ContainsKey($Item.Extension)) {
             $Key = $Item.Extension
+    $inOneDrive = ($item.PSParentPath.Contains($env:OneDrive) `
+        -or $item.PSParentPath.Contains($env:OneDriveConsumerOneDrive) `
+        -or $item.PSParentPath.Contains($env:OneDriveCommercial))
+
+    if ([bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and (-not $inOneDrive)) {
         }
     }
 
