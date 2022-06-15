@@ -32,8 +32,12 @@ function Get-FileColor($item) {
 }
 
 function Get-ChildItemColorFormatWide {
+[CmdletBinding(DefaultParameterSetName='Items', HelpUri='https://go.microsoft.com/fwlink/?LinkID=2096492')]
+
     param(
-        [string]$Path = "",
+        [Parameter(ParameterSetName='Items', Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
+        [string[]]
+        ${Path},
         [switch]$Force,
         [switch]$HideHeader,
         [switch]$TrailingSlashDirectory
@@ -47,86 +51,92 @@ function Get-ChildItemColorFormatWide {
 
     $items = Invoke-Expression $Expression
 
-    $lnStr = $items | Select-Object Name | Sort-Object { LengthInBufferCells("$_") } -Descending | Select-Object -First 1
-    $len = LengthInBufferCells($lnStr.Name)
-    $width = $Host.UI.RawUI.WindowSize.Width
-    $cols = if ($len) {[math]::Floor(($width + 1) / ($len + 2))} else {1}
-    if (!$cols) {$cols = 1}
+    $ifPipeline = $PSCmdlet.MyInvocation.Line -Match '\|'
 
-    $i = 0
-    $pad = [math]::Ceiling(($width + 2) / $cols) - 3
+    if ($ifPipeline) {
+        $items
+    } else {
+        $lnStr = $items | Select-Object Name | Sort-Object { LengthInBufferCells("$_") } -Descending | Select-Object -First 1
+        $len = LengthInBufferCells($lnStr.Name)
+        $width = $Host.UI.RawUI.WindowSize.Width
+        $cols = if ($len) {[math]::Floor(($width + 1) / ($len + 2))} else {1}
+        if (!$cols) {$cols = 1}
 
-    foreach ($item in $items) {
-        if ($item.PSobject.Properties.Name -contains "PSParentPath") {
-            if ($item.PSParentPath -match "FileSystem") {
-                $ParentType = "Directory"
-                $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
-            } elseif ($item.PSParentPath -match "Registry") {
-                $ParentType = "Hive"
-                $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
+        $i = 0
+        $pad = [math]::Ceiling(($width + 2) / $cols) - 3
+
+        foreach ($item in $items) {
+            if ($item.PSobject.Properties.Name -contains "PSParentPath") {
+                if ($item.PSParentPath -match "FileSystem") {
+                    $ParentType = "Directory"
+                    $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\FileSystem::", "")
+                } elseif ($item.PSParentPath -match "Registry") {
+                    $ParentType = "Hive"
+                    $ParentName = $item.PSParentPath.Replace("Microsoft.PowerShell.Core\Registry::", "")
+                }
+            } else {
+                $ParentType = ""
+                $ParentName = ""
+                $LastParentName = $ParentName
             }
-        } else {
-            $ParentType = ""
-            $ParentName = ""
+
+            if ($i -eq 0 -and $HideHeader) {
+                    Write-Host ""
+            }
+
+            # write header
+            if ($LastParentName -ne $ParentName -and -not $HideHeader) {
+                if ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
+                    Write-Host ""
+                }
+
+                for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                    Write-Host ""
+                }
+
+                Write-Host -Fore $OriginalForegroundColor "   $($ParentType):" -NoNewline
+
+                $Color = $GetChildItemColorTable.File['Directory']
+                Write-Host -Fore $Color " $ParentName"
+
+                for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
+                    Write-Host ""
+                }
+            }
+
+            $nnl = ++$i % $cols -ne 0
+
+            # truncate the item name
+            $toWrite = $item.Name
+
+            if ($TrailingSlashDirectory -and $item.GetType().Name -eq 'DirectoryInfo') {
+                $toWrite += '\'
+            }
+
+            $itemLength = LengthInBufferCells($toWrite)
+            if ($itemLength -gt $pad) {
+                $toWrite = (CutString $toWrite $pad)
+                $itemLength = LengthInBufferCells($toWrite)
+            }
+
+            $color = Get-FileColor $item
+            $widePad = $pad - ($itemLength - $toWrite.Length)
+            Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
+
+            if ($nnl) {
+                Write-Host "  " -NoNewLine
+            }
+
             $LastParentName = $ParentName
         }
 
-        if ($i -eq 0 -and $HideHeader) {
-                Write-Host ""
+        for ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
+            Write-Host ""
         }
 
-        # write header
-        if ($LastParentName -ne $ParentName -and -not $HideHeader) {
-            if ($i -ne 0 -AND $Host.UI.RawUI.CursorPosition.X -ne 0){  # conditionally add an empty line
-                Write-Host ""
-            }
-
-            for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
-                Write-Host ""
-            }
-
-            Write-Host -Fore $OriginalForegroundColor "   $($ParentType):" -NoNewline
-
-            $Color = $GetChildItemColorTable.File['Directory']
-            Write-Host -Fore $Color " $ParentName"
-
-            for ($l=1; $l -le $GetChildItemColorVerticalSpace; $l++) {
-                Write-Host ""
-            }
+        if ($nnl) {  # conditionally add an empty line
+            Write-Host ""
         }
-
-        $nnl = ++$i % $cols -ne 0
-
-        # truncate the item name
-        $toWrite = $item.Name
-
-        if ($TrailingSlashDirectory -and $item.GetType().Name -eq 'DirectoryInfo') {
-            $toWrite += '\'
-        }
-
-        $itemLength = LengthInBufferCells($toWrite)
-        if ($itemLength -gt $pad) {
-            $toWrite = (CutString $toWrite $pad)
-            $itemLength = LengthInBufferCells($toWrite)
-        }
-
-        $color = Get-FileColor $item
-        $widePad = $pad - ($itemLength - $toWrite.Length)
-        Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
-
-        if ($nnl) {
-            Write-Host "  " -NoNewLine
-        }
-
-        $LastParentName = $ParentName
-    }
-
-    for ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
-        Write-Host ""
-    }
-
-    if ($nnl) {  # conditionally add an empty line
-        Write-Host ""
     }
 }
 
