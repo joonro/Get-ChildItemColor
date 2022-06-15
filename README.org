@@ -9,16 +9,19 @@ by [[http://thepowershellguy.com/][the PowerShell Guy]], and [[https://github.co
 It provides two main functionalities:
 
 1. ~Get-ChildItemColor~, which adds coloring to the output of
-   ~Get-ChildItem~, this function supports pipelines (it is pipeline-aware, so
-   it does not touch the output when it is being used in a pipeline).
-2. =Get-ChildItemColorFormatWide=, which is colored version of
-   =Get-ChildItemColor | Format-Wide=.  This uses =Write-Host= to output
-   coloring. This is because =Get-ChildItemColor | Format-Wide= does not allow
-   multiple colors in one line. As a result, pipeline does not work with
-   =Get-ChildItemColorFormatWide=.
+   ~Get-ChildItem~. 
+2. ~Get-ChildItemColorFormatWide~, which is colored version of
+   ~Get-ChildItemColor | Format-Wide~. This uses ~Write-Host~ to output
+   coloring, because ~Get-ChildItemColor | Format-Wide~ does not allow
+   multiple colors in one line.
 
-Note that as of v3.0.0, it no longer overloads ~Out-Default~, and thus ~Get-ChildItem~'s
-output will not be touched. Users should use ~Get-ChildItemColor~ instead.
+=Get-ChildItemColor= has the following features:
+
+- Both functions support pipelines --- they are pipeline-aware, so they just return
+  untouhed output of ~Get-ChildItem~ when used as a part of a pipeline.
+- As of v3.0.0, it no longer overloads ~Out-Default~, and thus does not have
+  unintended consequences.
+- Both functions work as intended inside OneDrive directories.
 
 * Screenshots
 ** Get-ChildItemColor
