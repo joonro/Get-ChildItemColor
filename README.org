@@ -41,6 +41,43 @@ After cloning the repo, you can put files in =/src= folder into
 later). The =master= branch always contains the latest release version.
 ** Install from [[https://chocolatey.org][Chocolatey]]
 The module is available as a [[https://chocolatey.org/packages/get-childitemcolor][Chocolatey package]]. Install it using =choco install get-childitemcolor=.
+
+** Easiest way to use it in PowerShell 7
+Download the sources from github.
+
+Input in Powershell the command
+  =$Env:PSModulePath=
+and look in the directories, which are there listed.
+
+In the directory you search for, are already directories like "CimCmdlets", "Microsoft.PowerShell.Archive" and other.
+Go to this directory called "Modules" and input in the PowerShell
+  =mkdir Get-ChildItemColor=
+Go then in the created directory Get-ChildItemColor and copy inside it the files in the "src" directory of github called
+ "FileInfo.ps1", "Get-ChildItemColor.psd1", "Get-ChildItemColor.psm1", "Get-ChildItemColorTable.ps1", "MatchInfo.ps1",
+ "ProcessInfo.ps1", "PSColorHelper.ps1", "ServiceController.ps1"
+
+Now input in the Powershell the command
+  =$PROFILE=
+It outputs now the file, where the Powershell looks for initialization.
+If the directory to that file not exists, creating it.
+And if the file not exists, creating it, too.
+Now open the file in an text-editor like notepad.exe for example with
+=notepad $PROFILE=
+
+
+Input there the lines
+
+#+begin_src powershell
+Import-Module Get-ChildItemColor
+Set-Alias -Name dir -Value Get-ChildItemColor -Option AllScope
+Set-Alias -Name ls -Value Get-ChildItemColorFormatWide
+#+end_src
+
+and save it.
+Now start the PowerShell again.
+With the command "dir" you have a colord file list. With "ls" it is then in wide mode. And "gci" is still as default the old colorless output.
+You can also use the outwritten normal commands "Get-ChildItemColor", "Get-ChildItemColorFormatWide" and "Get-ChildItem".
+
 * Usage
 When you import the module:
 
