@@ -107,6 +107,9 @@ $GetChildItemColorExtensions.Add(
         # Javascript
         ".js", ".mjs", ".ts", ".tsx"
 
+        # Lua
+        ".lua", ".luac",
+
         # Objective C
         ".m", ".mm",
 
