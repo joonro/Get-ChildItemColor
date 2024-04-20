@@ -136,7 +136,6 @@ function Get-ChildItemColorFormatWide {
             }
 
             $color = Get-FileColor $item
-            Add-Content -Path "C:\Users\Michel\AppData\Local\Temp\x.txt" -Value "Get-ChildItemColorFormatWide Get-FileColor $item"
             $widePad = $pad - ($itemLength - $toWrite.Length)
             Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
 
