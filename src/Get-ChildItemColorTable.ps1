@@ -1,8 +1,10 @@
 $global:GetChildItemColorExtensions = @{}
+$global:GetChildItemColorProps = @{}
 
 $global:GetChildItemColorRegExTable = @{
     File = @{ Default = $OriginalForegroundColor }
 }
+
 # starts with dot
 $GetChildItemColorRegExTable.File.Add('^[.]','DarkRed')
 
@@ -174,6 +176,10 @@ $global:GetChildItemColorTable = @{
     Match = @{ Default = $OriginalForegroundColor }
 }
 
+#$GetChildItemColorTable.File.Add('Archive',"DarkRed")
+$GetChildItemColorTable.File.Add('Hidden',"DarkRed")
+$GetChildItemColorTable.File.Add('System',"DarkRed")
+$GetChildItemColorTable.File.Add('ReadOnly',"DarkRed")
 $GetChildItemColorTable.File.Add('Directory', "Blue")
 $GetChildItemColorTable.File.Add('Symlink', "Cyan") 
 
