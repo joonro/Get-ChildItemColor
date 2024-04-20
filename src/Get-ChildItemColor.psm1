@@ -28,6 +28,22 @@ function Get-FileColor($item) {
     }
 
     $Color = $GetChildItemColorTable.File[$key]
+    
+    
+    $keyRegex = ""
+    
+    if ($key -ne 'Symlink') {
+    	foreach ($regex in $GetChildItemColorRegExTable.File.Keys) {
+        	if ($item.Name -match $regex) {
+         		$keyRegex = $regex
+        	}
+        } 
+    }
+    if ($keyRegex -ne "") {
+    	$Color = $GetChildItemColorRegExTable.File[$keyRegex]
+    }
+    
+    
     return $Color
 }
 
@@ -120,6 +136,7 @@ function Get-ChildItemColorFormatWide {
             }
 
             $color = Get-FileColor $item
+            Add-Content -Path "C:\Users\Michel\AppData\Local\Temp\x.txt" -Value "Get-ChildItemColorFormatWide Get-FileColor $item"
             $widePad = $pad - ($itemLength - $toWrite.Length)
             Write-Host ("{0,-$widePad}" -f $toWrite) -Fore $color -NoNewLine:$nnl
 

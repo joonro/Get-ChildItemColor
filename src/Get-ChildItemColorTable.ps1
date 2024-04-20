@@ -1,5 +1,11 @@
 $global:GetChildItemColorExtensions = @{}
 
+$global:GetChildItemColorRegExTable = @{
+    File = @{ Default = $OriginalForegroundColor }
+}
+# starts with dot
+$GetChildItemColorRegExTable.File.Add('^[.]','DarkRed')
+
 $GetChildItemColorExtensions.Add(
     'CompressedList',
     @(
