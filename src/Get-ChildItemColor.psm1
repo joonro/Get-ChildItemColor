@@ -154,11 +154,15 @@ function Out-ChildItemColor {
     [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113362', RemotingCapability='None')]
     param(
         [switch] ${Transcript},
+        [switch] ${HumanReadableSize},
         [Parameter(Position=0, ValueFromPipeline=$True)]  [psobject]  ${InputObject}
     )
 
     begin {
         try {
+            if($PSBoundParameters.ContainsKey('HumanReadableSize')) {
+                $PSBoundParameters.Remove('HumanReadableSize') | Out-Null
+            }
             for ($l=1; $l -lt $GetChildItemColorVerticalSpace; $l++) {
                 Write-Host ""
             }
@@ -180,7 +184,7 @@ function Out-ChildItemColor {
     process {
         try {
             if (($_ -is [System.IO.DirectoryInfo]) -or ($_ -is [System.IO.FileInfo])) {
-                FileInfo $_
+                FileInfo $_ -HumanReadableSize:$HumanReadableSize
                 $_ = $Null
             }
 
@@ -254,12 +258,19 @@ param(
     ${Force},
 
     [switch]
-    ${Name})
+    ${Name},
+
+    [Alias('-h')]
+    [switch]
+    ${HumanReadableSize} = $false)
 
 
 dynamicparam
 {
     try {
+        if($PSBoundParameters.ContainsKey('HumanReadableSize')) {
+            $PSBoundParameters.Remove('HumanReadableSize') | Out-Null
+        }
         $targetCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Management\Get-ChildItem', [System.Management.Automation.CommandTypes]::Cmdlet, $PSBoundParameters)
         $dynamicParams = @($targetCmd.Parameters.GetEnumerator() | Microsoft.PowerShell.Core\Where-Object { $_.Value.IsDynamic })
         if ($dynamicParams.Length -gt 0)
@@ -315,7 +326,7 @@ process
         if ($ifPipeline) {
             $steppablePipeline.Process($_)
         } else {
-            $items | Out-ChildItemColor
+            $items | Out-ChildItemColor -HumanReadableSize:$HumanReadableSize
         }
     } catch {
         throw
