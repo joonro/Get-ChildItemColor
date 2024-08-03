@@ -166,6 +166,7 @@ $global:GetChildItemColorTable = @{
     File = @{ Default = $OriginalForegroundColor }
     Service = @{ Default = $OriginalForegroundColor }
     Match = @{ Default = $OriginalForegroundColor }
+    Size = @{Default = $OriginalForegroundColor}
 }
 
 $GetChildItemColorTable.File.Add('Directory', "Blue")
@@ -201,3 +202,9 @@ $GetChildItemColorTable.Service.Add('Stopped', "DarkRed")
 $GetChildItemColorTable.Match.Add('Path', "Cyan")
 $GetChildItemColorTable.Match.Add('LineNumber', "Yellow")
 $GetChildItemColorTable.Match.Add('Line', $OriginalForegroundColor)
+
+$GetChildItemColorTable.Size.Add('K', "DarkGreen")
+$GetChildItemColorTable.Size.Add('M', "DarkYellow")
+$GetChildItemColorTable.Size.Add('G', "DarkRed")
+$GetChildItemColorTable.Size.Add('B', $OriginalForegroundColor)
+
