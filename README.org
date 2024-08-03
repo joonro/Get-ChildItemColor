@@ -61,14 +61,18 @@ profile[fn:pathProfileISE] as it does not work in ISE):
 If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not in the ISE
     Import-Module Get-ChildItemColor
     
-    Set-Alias l Get-ChildItemColor -option AllScope [-HumanReadableSize]
-    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader] [-TrailingSlashDirectory]
+    Set-Alias l Get-ChildItemColor -option AllScope
+    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 }
 #+end_src
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
 of =Get-ChildItem | Format-Wide= equivalent.
 
+~Get-ChildItemColor~ has the following optional switch:
+
+  - -HumanReadableSize :: Unix style size string (e.g. M instead of MB, K instead of KB etc) (thanks to [[https://github.com/kforeverisback][kforeverisback]])
+  
 ~Get-ChildItemColorFormatWide~ has the following optional switches:
 
 - -HideHeader :: supress printing of headers (path on top).
