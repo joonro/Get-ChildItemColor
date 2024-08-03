@@ -1,18 +1,20 @@
 # Helper method to write file length in a more human readable format
+# Will output the length in B, KB, MB, or GB
+# Similar to the `ls -lh` command in Unix, it'll truncate any trailing zeros after the decimal point
 function Write-FileLength {
     Param ($Length)
 
-    If ($Length -eq $null) {
+    If ($null -eq $Length) {
         Return ""
     } ElseIf ($Length -ge 1GB) {
-        Return ($Length / 1GB).ToString("F") + 'GB'
+        Return ($Length / 1GB).ToString("#0.#") + 'G'
     } ElseIf ($Length -ge 1MB) {
-        Return ($Length / 1MB).ToString("F") + 'MB'
+        Return ($Length / 1MB).ToString("#0.#") + 'M'
     } ElseIf ($Length -ge 1KB) {
-        Return ($Length / 1KB).ToString("F") + 'KB'
+        Return ($Length / 1KB).ToString("#0.#") + 'K'
     }
 
-    Return $Length.ToString() + '  '
+    Return $Length.ToString()
 }
 
 # Outputs a line of a DirectoryInfo or FileInfo
