@@ -61,7 +61,7 @@ profile[fn:pathProfileISE] as it does not work in ISE):
 If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not in the ISE
     Import-Module Get-ChildItemColor
     
-    Set-Alias l Get-ChildItemColor -option AllScope
+    Set-Alias l Get-ChildItemColor -option AllScope [-HumanReadableSize]
     Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader] [-TrailingSlashDirectory]
 }
 #+end_src
