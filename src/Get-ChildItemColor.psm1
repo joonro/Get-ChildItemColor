@@ -5,6 +5,13 @@ $Global:GetChildItemColorVerticalSpace = 1
 
 . "$PSScriptRoot\Get-ChildItemColorTable.ps1"
 
+function Get-SizeColor($sizeKey) {
+    if ($null -eq $sizeKey -or $sizeKey -eq "") {
+        $sizeKey = 'Default'
+    }
+    return $GetChildItemColorTable.Size[$sizeKey]
+}
+
 function Get-FileColor($item) {
     $key = 'Default'
 

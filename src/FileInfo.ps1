@@ -5,21 +5,22 @@ function Write-FileLength {
     Param ($Length)
 
     If ($null -eq $Length) {
-        Return ""
+        Return "", (Get-SizeColor "")
     } ElseIf ($Length -ge 1GB) {
-        Return ($Length / 1GB).ToString("#0.#") + 'G'
+        Return (($Length / 1GB).ToString("#0.#") + 'G'), (Get-SizeColor "G")
     } ElseIf ($Length -ge 1MB) {
-        Return ($Length / 1MB).ToString("#0.#") + 'M'
+        Return (($Length / 1MB).ToString("#0.#") + 'M'), (Get-SizeColor "M")
     } ElseIf ($Length -ge 1KB) {
-        Return ($Length / 1KB).ToString("#0.#") + 'K'
+        Return (($Length / 1KB).ToString("#0.#") + 'K'), (Get-SizeColor "K")
     }
 
-    Return $Length.ToString()
+    # For bytes
+    Return $Length.ToString(), (Get-SizeColor "B")
 }
 
 # Outputs a line of a DirectoryInfo or FileInfo
 function Write-Color-LS {
-    param ([string]$color = "White", [bool]$humanReadable, $item)
+    param ([string]$fileColor = "White", [bool]$humanReadable, $item)
 
     Write-host ("{0,-7} " -f $item.mode) -NoNewline
     Write-host ("{0,25} " -f ([String]::Format("{0,10}  {1,8}", $item.LastWriteTime.ToString("d"), $item.LastWriteTime.ToString("t")))) -NoNewline
@@ -29,12 +30,13 @@ function Write-Color-LS {
     } else {
         # Write length in human readable format if the switch is set
         if ($humanReadable) {
-            Write-host ("{0,10} " -f (Write-FileLength $item.length)) -NoNewline
+            $sizeAndColor = Write-FileLength $item.length
+            Write-host ("{0,10} " -f $sizeAndColor[0]) -NoNewline -ForegroundColor $sizeAndColor[1]
         } else {
         Write-host ("{0,10} " -f $item.length) -NoNewline
         }
     }
-    Write-host ("{0}" -f $item.name) -ForegroundColor $color
+    Write-host ("{0}" -f $item.name) -ForegroundColor $fileColor
 }
 
 function FileInfo {
