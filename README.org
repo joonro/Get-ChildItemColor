@@ -29,18 +29,20 @@ It provides two main functionalities:
 ** Get-ChildItemColorFormatWide (=ls= equivalent)
 [[file:./screenshots/Get-ChildItemColorFormatWide.png]] 
 * Install
+- The [[https://github.com/joonro/Get-ChildItemColor/wiki][wiki]] has additional instructions and examples.
 ** Install from [[https://www.powershellgallery.com/packages/Get-ChildItemColor/][PowerShellGallery]]
 PowerShellGet is required, which is included in Windows 10 and WMF5. If you
 are using PowerShell V3 or V4, you will need to install [[https://www.microsoft.com/en-us/download/details.aspx?id=49186][PowerShellGet]].
 
 Then, you can run =Install-Module Get-ChildItemColor=.
 ** Install from GitHub
-After cloning the repo, you can put files in =/src= folder into
+After cloning the repo or downloading the files, you can put files in =/src= folder into
 =Get-ChildItemColor= folder under your =PSModulePath= 
 (e.g., =$ENV:UserProfile\Documents\PowerShell\Modules= for PowerShell 6 and
 later). The =master= branch always contains the latest release version.
 ** Install from [[https://chocolatey.org][Chocolatey]]
 The module is available as a [[https://chocolatey.org/packages/get-childitemcolor][Chocolatey package]]. Install it using =choco install get-childitemcolor=.
+
 * Usage
 When you import the module:
 
@@ -60,13 +62,17 @@ If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not i
     Import-Module Get-ChildItemColor
     
     Set-Alias l Get-ChildItemColor -option AllScope
-    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope [-HideHeader] [-TrailingSlashDirectory]
+    Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 }
 #+end_src
 
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
 of =Get-ChildItem | Format-Wide= equivalent.
 
+~Get-ChildItemColor~ has the following optional switch:
+
+  - -HumanReadableSize :: Unix style size string (e.g. M instead of MB, K instead of KB etc) (thanks to [[https://github.com/kforeverisback][kforeverisback]])
+  
 ~Get-ChildItemColorFormatWide~ has the following optional switches:
 
 - -HideHeader :: supress printing of headers (path on top).
