@@ -46,6 +46,8 @@ function Get-ChildItemColorFormatWide {
         [string[]]
         ${Path},
         [switch]$Force,
+        [switch]$Directory,
+        [switch]$File,
         [switch]$HideHeader,
         [switch]$TrailingSlashDirectory
     )
@@ -112,6 +114,15 @@ function Get-ChildItemColorFormatWide {
             }
 
             $nnl = ++$i % $cols -ne 0
+
+            if ($Directory -and $item.GetType().Name -ne 'DirectoryInfo') {
+                $LastParentName = $ParentName
+                continue
+
+            } elseif ($File -and $item.GetType().Name -ne 'FileInfo') {
+                $LastParentName = $ParentName
+                continue
+            }
 
             # truncate the item name
             $toWrite = $item.Name
