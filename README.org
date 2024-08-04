@@ -77,6 +77,16 @@ of =Get-ChildItem | Format-Wide= equivalent.
 
 - -HideHeader :: supress printing of headers (path on top).
 - -TrailingSlashDirectory :: add a trailing slash to directory names.
+
+Note that if you want to use these switches as default, you have to define a function. For example,
+
+#+begin_src powershell
+function Get-ChildItemColorForceWideHHTS {
+    	Get-ChildItemColorFormatWide -HideHeader -TrailingSlashDirectory -Force $Args[0]
+}
+
+Set-Alias ls Get-ChildItemColorForceWideHHTS -option AllScope
+#+end_src
  
 [fn:pathProfile] ~$Home\[My ]Documents\PowerShell\Profile.ps1~ or ~$Home\[My ]Documents\WindowsPowerShell\Profile.ps1~ 
 
@@ -119,7 +129,7 @@ $Global:GetChildItemColorVerticalSpace = 1
 * Authors
 - [[http://github.com/joonro][Joon Ro]].
 * Changelog
-- See [[https://github.com/joonro/Get-ChildItemColor/releases][Releases]] for newer changelog.
+- This section only contains old logs. See [[https://github.com/joonro/Get-ChildItemColor/releases][Releases]] for newer changelog.
 ** v2.4.0
 - Add ~HideHeader~ switch to ~Get-ChildItemColorFormatWide~ ([[https://github.com/joonro/Get-ChildItemColor/issues/29][#29]])
 ** v2.3.0
