@@ -69,14 +69,19 @@ If (-Not (Test-Path Variable:PSise)) {  # Only run this in the console and not i
 So =l= yields colored output of =Get-ChildItem= and =ls= yields colored output
 of =Get-ChildItem | Format-Wide= equivalent.
 
+Both functions have the following optional switches:
+
+- -File :: Show only files.
+- -Directory :: Show only directories.
+
 ~Get-ChildItemColor~ has the following optional switch:
 
   - -HumanReadableSize :: Unix style size string (e.g. M instead of MB, K instead of KB etc) (thanks to [[https://github.com/kforeverisback][kforeverisback]])
   
 ~Get-ChildItemColorFormatWide~ has the following optional switches:
 
-- -HideHeader :: supress printing of headers (path on top).
-- -TrailingSlashDirectory :: add a trailing slash to directory names.
+- -HideHeader :: Supress printing of headers (path on top).
+- -TrailingSlashDirectory :: Add a trailing slash to directory names.
 
 Note that if you want to use these switches as default, you have to define a function. For example,
 
