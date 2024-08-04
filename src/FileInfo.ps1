@@ -23,17 +23,17 @@ function Write-Color-LS {
     param ([string]$fileColor = "White", [bool]$humanReadable, $item)
 
     Write-host ("{0,-7} " -f $item.mode) -NoNewline
-    Write-host ("{0,25} " -f ([String]::Format("{0,10}  {1,8}", $item.LastWriteTime.ToString("d"), $item.LastWriteTime.ToString("t")))) -NoNewline
+    Write-host ("{0,26} " -f ([String]::Format("{0,10} {1,8}", $item.LastWriteTime.ToString("d"), $item.LastWriteTime.ToString("t")))) -NoNewline
     # Do not write length 1 for directories
     if ($item.PSIsContainer) {
-        Write-host ("{0,10} " -f " ") -NoNewLine
+        Write-host ("{0,14} " -f " ") -NoNewLine
     } else {
         # Write length in human readable format if the switch is set
         if ($humanReadable) {
             $sizeAndColor = Write-FileLength $item.length
-            Write-host ("{0,10} " -f $sizeAndColor[0]) -NoNewline -ForegroundColor $sizeAndColor[1]
+            Write-host ("{0,14} " -f $sizeAndColor[0]) -NoNewline -ForegroundColor $sizeAndColor[1]
         } else {
-        Write-host ("{0,10} " -f $item.length) -NoNewline
+        Write-host ("{0,14} " -f $item.length) -NoNewline
         }
     }
     Write-host ("{0}" -f $item.name) -ForegroundColor $fileColor
@@ -60,8 +60,8 @@ function FileInfo {
            Write-Host ""
        }
 
-       Write-Host "Mode                LastWriteTime     Length Name"
-       Write-Host "----                -------------     ------ ----"
+       Write-Host "Mode                 LastWriteTime         Length Name"
+       Write-Host "----                 -------------         ------ ----"
 
        $script:ShowHeader = $False
     }
