@@ -26,8 +26,12 @@ function Get-FileColor($item) {
 
     if ([bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and (-not $inOneDrive)) {
         $key = 'Symlink'
-    } elseif ($item.GetType().Name -eq 'DirectoryInfo') {
-        $key = 'Directory'
+    } elseif ($item.IsReadOnly) {
+        $key = 'ReadOnly'
+	} elseif ($item.Attributes -band [System.IO.FileAttributes]::Hidden) {
+        $key = 'Hidden'
+    } elseif ($item.Attributes -band [System.IO.FileAttributes]::System) {
+        $key = 'System'
     } elseif ($item.PSobject.Properties.Name -contains "Extension") {
         If ($GetChildItemColorTable.File.ContainsKey($item.Extension)) {
             $key = $item.Extension
@@ -35,6 +39,22 @@ function Get-FileColor($item) {
     }
 
     $Color = $GetChildItemColorTable.File[$key]
+    
+    
+    $keyRegex = ""
+    
+    if ($key -ne 'Symlink') {
+    	foreach ($regex in $GetChildItemColorRegExTable.File.Keys) {
+        	if ($item.Name -match $regex) {
+         		$keyRegex = $regex
+        	}
+        } 
+    }
+    if ($keyRegex -ne "") {
+    	$Color = $GetChildItemColorRegExTable.File[$keyRegex]
+    }
+    
+    
     return $Color
 }
 
